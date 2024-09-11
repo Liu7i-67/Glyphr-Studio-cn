@@ -15,6 +15,7 @@ import { GlyphrStudioProject } from '../project_data/glyphr_studio_project.js';
 import { closeAllNavMenus } from '../project_editor/navigator.js';
 import { ProjectEditor } from '../project_editor/project_editor.js';
 import { GlyphrStudioApp, showAppErrorPage } from './app.js';
+import { initLang } from '../i18n/index.js';
 
 /**
  * First function to run when the browser starts
@@ -138,6 +139,7 @@ export function getShipDate(dayOffset = 0) {
 
 // The main app object
 let GSApp;
+
 export function getGlyphrStudioApp() {
 	if (!GSApp) {
 		GSApp = new GlyphrStudioApp();

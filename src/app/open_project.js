@@ -6,6 +6,7 @@ import { cancelDefaultEventActions } from '../edit_canvas/events.js';
 import { ioFont_importFont } from '../formats_io/font_import.js';
 import { ioSVG_importSVGfont } from '../formats_io/svg_font_import.js';
 import { validateSingleFileInput } from '../formats_io/validate_file_input.js';
+import { changeLng } from '../i18n/index.js';
 import { GlyphrStudioProject } from '../project_data/glyphr_studio_project.js';
 import { importGlyphrProjectFromText } from '../project_editor/import_project.js';
 import obleggExampleProject from '../samples/oblegg.gs2?raw';
@@ -18,6 +19,7 @@ import {
 	getProjectEditorImportTarget,
 	setCurrentProjectEditor,
 } from './main.js';
+import i18next, { t } from 'i18next';
 
 /**
  * Page > Open Project
@@ -41,6 +43,10 @@ export function makePage_OpenProject(secondProjectFlag = false) {
 		recentMessage = ` - <a href="https://www.glyphrstudio.com/help/about/updates.html" target="_blank">recently updated!</a>`;
 	}
 
+	const changeLangs = (lang) => {
+		changeLng(lang.dataset.lang);
+	};
+
 	const content = makeElement({
 		tag: 'div',
 		id: 'app__page',
@@ -51,16 +57,27 @@ export function makePage_OpenProject(secondProjectFlag = false) {
 					<span class="open-project__version-name">${app.versionName}</span>
 					<span class="open-project__version-number">${app.version}${recentMessage}</span>
 					<div class="open-project__blurb">
-						For more information visit <a href="http://www.glyphrstudio.com" target="_blank">www.glyphrstudio.com</a><br>
-						Glyphr Studio is licensed under a <a href="https://www.gnu.org/licenses/gpl.html" target="_blank">GNU General Public License</a>,
-						which is a free / open source "copyleft" license. You are free to use, distribute, and modify Glyphr Studio as long as
-						this license and its freeness stays intact.
+						${t('ui:blurb1')} <a href="http://www.glyphrstudio.com" target="_blank">www.glyphrstudio.com</a><br>
+						Glyphr Studio ${t('ui:blurb2')} <a href="https://www.gnu.org/licenses/gpl.html" target="_blank">${t(
+			'ui:blurb3'
+		)}</a>${t('ui:blurb4')}，${t('ui:blurb5')}
 					</div>
+					<div class="open-project__langs">${t(
+						'ui:Language'
+					)}：<button data-lang="en">English</button><button data-lang="zh-CN">简体中文</button></div>
 				</div>
 				<div id="open-project__right-area" vertical-align="middle"></div>
 				<div id="open-project__drop-note"></div>
 			</div>
 		`,
+	});
+
+	// 修改语言
+	const langs = content.querySelectorAll('.open-project__langs button');
+	langs.forEach((lang) => {
+		lang.addEventListener('click', () => {
+			changeLangs(lang);
+		});
 	});
 
 	// Tabs
@@ -129,7 +146,7 @@ export function makeOpenProjectTabs() {
 	const tabContentNew = makeElement({
 		id: 'tab-content__new',
 		className: 'open-project__tab-content',
-		innerHTML: '<h2>Start a new Glyphr Studio project</h2>\nProject name: &nbsp;',
+		innerHTML: `<h2>${t('ui:NewStart')}</h2>\n${t('ui:ProjectName')}: &nbsp;`,
 		style: 'display: none;',
 	});
 
@@ -142,7 +159,7 @@ export function makeOpenProjectTabs() {
 	const buttonStartNewProject = makeElement({
 		tag: 'fancy-button',
 		id: 'button__create-new-project',
-		innerHTML: 'Create a new font from scratch',
+		innerHTML: i18next.t('ui:createNewProject'),
 		onClick: handleNewProject,
 	});
 
@@ -153,7 +170,7 @@ export function makeOpenProjectTabs() {
 	const tabContentLoad = makeElement({
 		id: 'tab-content__load',
 		className: 'open-project__tab-content',
-		innerHTML: '<h2>Load a file</h2>\nDrag and drop one of the following:<br>',
+		innerHTML: `<h2>${t('ui:LoadFile')}</h2>\n${t('ui:DragText')}:<br>`,
 		style: 'display: none;',
 	});
 
@@ -169,7 +186,7 @@ export function makeOpenProjectTabs() {
 	const openFileChooser = makeElement({
 		tag: 'fancy-button',
 		attributes: { dark: '' },
-		innerHTML: 'or, open file chooser...',
+		innerHTML: t('ui:OrText'),
 		onClick: async () => {
 			getFilesFromFilePicker(handleOpenProjectPageFileInput);
 		},
@@ -181,7 +198,7 @@ export function makeOpenProjectTabs() {
 	const tabContentAutoSaves = makeElement({
 		id: 'tab-content__auto-saves',
 		className: 'open-project__tab-content',
-		innerHTML: `<h2>Restore from auto-saved backup</h2>`,
+		innerHTML: `<h2>${t('ui:RestoreTips')}</h2>`,
 		style: 'display: none;',
 	});
 
@@ -213,9 +230,7 @@ export function makeOpenProjectTabs() {
 	}
 
 	if (!hasContent)
-		contentAutoSavesList.appendChild(
-			makeElement({ tag: 'i', innerHTML: 'No auto-saves exist yet' })
-		);
+		contentAutoSavesList.appendChild(makeElement({ tag: 'i', innerHTML: t('ui:NoRestore') }));
 
 	addAsChildren(tabContentAutoSaves, [contentAutoSavesList]);
 
@@ -223,13 +238,13 @@ export function makeOpenProjectTabs() {
 	const tabContentExamples = makeElement({
 		id: 'tab-content__examples',
 		className: 'open-project__tab-content',
-		innerHTML: `<h2>Load an example project</h2>`,
+		innerHTML: `<h2>${t('ui:LoadTips')}</h2>`,
 		style: 'display: none;',
 	});
 
 	const contentSimpleProject = makeElement({
 		tag: 'div',
-		innerHTML: `The Simple v2 Project has a few characters and things to show off basic functionality:<br><br>`,
+		innerHTML: `${t('ui:SimpleTips')}:<br><br>`,
 	});
 
 	const buttonSimpleProject = makeElement({
@@ -240,7 +255,7 @@ export function makeOpenProjectTabs() {
 
 	const contentOblegg = makeElement({
 		tag: 'div',
-		innerHTML: `Oblegg is the GSv2 project we use to test all the various Glyphr Studio features:<br><br>`,
+		innerHTML: `${t('ui:ObleggTips')}:<br><br>`,
 	});
 
 	const buttonOblegg = makeElement({
@@ -264,7 +279,7 @@ export function makeOpenProjectTabs() {
 		tag: 'button',
 		id: 'open-project__tab-new',
 		className: 'open-project__tab',
-		innerHTML: 'New',
+		innerHTML: t('ui:New'),
 		onClick: () => {
 			deselectAllTabs();
 			tabNew.setAttribute('selected', '');
@@ -276,7 +291,7 @@ export function makeOpenProjectTabs() {
 		tag: 'button',
 		id: 'open-project__tab-load',
 		className: 'open-project__tab',
-		innerHTML: 'Load',
+		innerHTML: t('ui:Load'),
 		onClick: () => {
 			deselectAllTabs();
 			tabLoad.setAttribute('selected', '');
@@ -288,7 +303,7 @@ export function makeOpenProjectTabs() {
 		tag: 'button',
 		id: 'open-project__tab-auto-saves',
 		className: 'open-project__tab',
-		innerHTML: 'Restore',
+		innerHTML: t('ui:Restore'),
 		onClick: () => {
 			deselectAllTabs();
 			tabAutoSaves.setAttribute('selected', '');
@@ -300,7 +315,7 @@ export function makeOpenProjectTabs() {
 		tag: 'button',
 		id: 'open-project__tab-examples',
 		className: 'open-project__tab',
-		innerHTML: 'Examples',
+		innerHTML: t('ui:Examples'),
 		onClick: () => {
 			deselectAllTabs();
 			tabExamples.setAttribute('selected', '');

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject, getGlyphrStudioApp } from '../app/main.js';
 import { accentColors, uiColors } from '../common/colors.js';
 import { makeElement } from '../common/dom.js';
@@ -358,7 +359,7 @@ export class DisplayCanvas extends HTMLElement {
 				this.ctx.textBaseline = 'middle';
 				let x = this.textBlock.canvasMaxes.xMin;
 				let y = this.height / 2;
-				this.ctx.fillText('Project preview text will be shown here.', x, y);
+				this.ctx.fillText(t('ui:ProjectTips'), x, y);
 			}
 		}
 

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { makeElement } from '../common/dom.js';
 import { countItems } from '../common/functions.js';
@@ -79,23 +80,23 @@ export function makePage_Overview() {
 	const projectSummaryCard = makeElement({
 		className: 'panel__card more-padding',
 		innerHTML: `
-			<h2>Project info</h2>
-			<label>Project name: </label><span>${project.settings.project.name}</span>
-			<label>Font family: </label><span>${project.settings.font.family}</span>
-			<label>Style: </label><span>${project.settings.font.style}</span>
-			<label>Glyph count: </label><span>${
-				countItems(project.glyphs) + countItems(project.ligatures)
-			}</span>
-			<label>UPM: </label><span>${project.settings.font.upm}</span>
-			<label>Ascent: </label><span>${project.settings.font.ascent}</span>
-			<label>Descent: </label><span>${project.settings.font.descent}</span>
+			<h2>${t('ui:ProjectInfo')}</h2>
+			<label>${t('ui:ProjectName')}: </label><span>${project.settings.project.name}</span>
+			<label>${t('ui:FontFamily')}: </label><span>${project.settings.font.family}</span>
+			<label>${t('ui:Style')}: </label><span>${project.settings.font.style}</span>
+			<label>${t('ui:GlyphCount')}: </label><span>${
+			countItems(project.glyphs) + countItems(project.ligatures)
+		}</span>
+			<label>${t('ui:UPM')}: </label><span>${project.settings.font.upm}</span>
+			<label>${t('ui:Ascent')}: </label><span>${project.settings.font.ascent}</span>
+			<label>${t('ui:Descent')}: </label><span>${project.settings.font.descent}</span>
 			<br><span></span>
 		`,
 	});
 	projectSummaryCard.appendChild(
 		makeElement({
 			tag: 'fancy-button',
-			innerHTML: 'Edit project and font info',
+			innerHTML: t('ui:EditTips'),
 			attributes: { secondary: '' },
 			onClick: () => {
 				const editor = getCurrentProjectEditor();
@@ -108,14 +109,14 @@ export function makePage_Overview() {
 	const contributeCard = makeElement({
 		className: 'panel__card full-width more-padding',
 		innerHTML: `
-			Glyphr Studio is open source and community supported.
+			Glyphr Studio ${t('ui:openTips')}
 			<br>
 			`,
 	});
 	contributeCard.appendChild(
 		makeElement({
 			tag: 'fancy-button',
-			innerHTML: 'Learn how you can help Glyphr Studio!',
+			innerHTML: t('ui:learnTips'),
 			attributes: { secondary: '' },
 			onClick: () => {
 				showModalDialog(makeContributeContent(), 500);

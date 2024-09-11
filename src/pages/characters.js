@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProjectEditor } from '../app/main.js';
 import { addAsChildren, makeElement } from '../common/dom.js';
 import { closeAllInfoBubbles } from '../controls/dialogs/dialogs.js';
@@ -35,13 +36,25 @@ export function makePage_Characters() {
 		<div class="editor__page">
 			<div class="editor-page__left-area">
 				<div class="editor-page__nav-area">
-					${makeNavButton({ level: 'l1', superTitle: 'PAGE', title: 'Characters' })}
+					${makeNavButton({
+						level: 'l1',
+						superTitle: 'PAGE',
+						title: 'Characters',
+						label: t('ui:Characters'),
+						subLabel: t('ui:PAGE'),
+					})}
 					${makeNavButton({
 						level: 'l2',
 						superTitle: 'EDITING',
+						subLabel: t('ui:EDITING'),
 						title: editor.project.getItemName(editor.selectedGlyphID, true),
 					})}
-					${makeNavButton({ level: 'l3', superTitle: 'PANEL', title: editor.nav.panel })}
+					${makeNavButton({
+						level: 'l3',
+						superTitle: 'PANEL',
+						subLabel: t('ui:PANEL'),
+						title: editor.nav.panel,
+					})}
 				</div>
 				<div id="editor-page__panel"></div>
 			</div>

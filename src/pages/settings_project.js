@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { decToHex, hexesToChars } from '../common/character_ids.js';
 import { addAsChildren, makeElement, textToNode } from '../common/dom.js';
@@ -28,8 +29,8 @@ export function makeSettingsTabContentProject() {
 		className: 'settings-page__tab-content',
 		id: 'tab-content__project',
 		innerHTML: `
-			<h1>Project settings</h1>
-			<p>These settings affect how this Glyphr Studio Project behaves.</p>
+			<h1>${t('ui:ProjectSetting')}</h1>
+			<p>${t('ui:ProjectSettingTips')}</p>
 		`,
 	});
 
@@ -49,20 +50,26 @@ export function makeSettingsTabContentProject() {
 	const rangesArea = makeElement({
 		tag: 'div',
 		innerHTML: `
-			<h2>Character ranges</h2>
+			<h2>${t('ui:CharacterRanges')}</h2>
 			<p>
-				Character ranges are based on the <a href="https://en.wikipedia.org/wiki/Unicode" target="_blank">Unicode Standard</a>,
-				which assigns a <a href="https://en.wikipedia.org/wiki/Hexadecimal" target="_blank">hexadecimal number</a>
-				to all possible characters in a font.
-				<a href="https://en.wikipedia.org/wiki/Unicode_block" target="_blank">Wikipedia's Unicode Block page</a>
-				is a good place to get familiar with all the different characters it's possible to have in a font.
+				${t('ui:CharacterRangesTips1')}<a href="https://en.wikipedia.org/wiki/Unicode" target="_blank">${t(
+			'ui:CharacterRangesTips2'
+		)}</a>${t(
+			'ui:CharacterRangesTips3'
+		)}<a href="https://en.wikipedia.org/wiki/Hexadecimal" target="_blank">${t(
+			'ui:CharacterRangesTips4'
+		)}</a>
+				${t('ui:CharacterRangesTips5')}
+				<a href="https://en.wikipedia.org/wiki/Unicode_block" target="_blank">${t(
+					'ui:CharacterRangesTips6'
+				)}</a>${t('ui:CharacterRangesTips7')}
 			</p>
 		`,
 	});
 
 	const addStandardRangeButton = makeElement({
 		tag: 'fancy-button',
-		innerHTML: 'Add standard character ranges from Unicode',
+		innerHTML: t('ui:AddTips'),
 		onClick: showUnicodeCharacterRangeDialog,
 	});
 	// Have to add attribute after the button is created
@@ -70,7 +77,7 @@ export function makeSettingsTabContentProject() {
 
 	const addCustomRangeButton = makeElement({
 		tag: 'fancy-button',
-		innerHTML: 'Add a custom character range',
+		innerHTML: t('ui:AddCustomTips'),
 		onClick: () => showEditCharacterRangeDialog(),
 	});
 	// Have to add attribute after the button is created
@@ -82,27 +89,25 @@ export function makeSettingsTabContentProject() {
 		addCustomRangeButton,
 		textToNode('<br>'),
 		textToNode('<br>'),
-		textToNode('<h3>Enabled character ranges</h3>'),
+		textToNode(`<h3>${t('ui:EnabledCharacterRanges')}</h3>`),
 		textToNode(`
 			<p>
-				These character ranges will be visible on the Characters page,
-				and they will be exported to fonts.
+				${t('ui:EnabledCharacterTips1')}
 				<br>
-				Hiding a character range <strong>will not</strong>
-				delete individual glyphs from the project.
+				${t('ui:EnabledCharacterTips2')}<strong>${t('ui:EnabledCharacterTips3')}</strong>${t(
+			'ui:EnabledCharacterTips4'
+		)}
 			</p>
 		`),
 		textToNode('<div id="enabled-range-table__wrapper"></div>'),
 		textToNode('<br>'),
 		textToNode('<br>'),
-		textToNode('<h3>Hidden character ranges</h3>'),
+		textToNode(`<h3>${t('ui:HiddenCharacterRanges')}</h3>`),
 		textToNode(`
 			<p>
-				These are ranges with characters that are saved in your project,
-				but are not part of enabled character ranges.
+				${t('ui:HiddenCharacterTips1')}
 				<br>
-				These will be saved to your Glyphr Studio Project File, but
-				will not be exported to fonts.
+				${t('ui:HiddenCharacterTips2')}
 			</p>
 		`),
 		textToNode('<div id="hidden-range-table__wrapper"></div>'),
@@ -141,11 +146,11 @@ function makeEnabledRangesTable() {
 	});
 
 	addAsChildren(rangeTable, [
-		textToNode('<span class="list__column-header">Range name</span>'),
-		textToNode('<span class="list__column-header">Start</span>'),
-		textToNode('<span class="list__column-header">End</span>'),
-		textToNode('<span class="list__column-header">Characters</span>'),
-		textToNode('<span class="list__column-header">Actions</span>'),
+		textToNode(`<span class="list__column-header">${t('ui:RangeName')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:Start')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:End')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:Characters')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:Actions')}</span>`),
 	]);
 
 	const project = getCurrentProject();
@@ -171,7 +176,7 @@ function makeEnabledRangesTable() {
 		addAsChildren(actions, [
 			makeElement({
 				tag: 'a',
-				innerHTML: 'Edit',
+				innerHTML: t('ui:Edit'),
 				onClick: () => {
 					showEditCharacterRangeDialog(range);
 				},
@@ -181,14 +186,14 @@ function makeEnabledRangesTable() {
 		if (displayRanges.length <= 1) {
 			actions.appendChild(
 				textToNode(`
-				<span disabled="disabled" title="At least one character range must be enabled">Hide</span>
+				<span disabled="disabled" title="${t('ui:HideTips')}">${t('ui:Hide')}</span>
 			`)
 			);
 		} else {
 			actions.appendChild(
 				makeElement({
 					tag: 'a',
-					innerHTML: 'Hide',
+					innerHTML: t('ui:Hide'),
 					onClick: () => hideCharacterRange(range),
 				})
 			);
@@ -217,11 +222,11 @@ function makeHiddenRangesTable() {
 	});
 
 	addAsChildren(rangeTable, [
-		textToNode('<span class="list__column-header">Range name</span>'),
-		textToNode('<span class="list__column-header">Start</span>'),
-		textToNode('<span class="list__column-header">End</span>'),
-		textToNode('<span class="list__column-header">Characters</span>'),
-		textToNode('<span class="list__column-header">Action</span>'),
+		textToNode(`<span class="list__column-header">${t('ui:RangeName')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:Start')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:End')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:Characters')}</span>`),
+		textToNode(`<span class="list__column-header">${t('ui:Actions')}</span>`),
 	]);
 
 	const project = getCurrentProject();
@@ -236,7 +241,7 @@ function makeHiddenRangesTable() {
 			addAsChildren(actions, [
 				makeElement({
 					tag: 'a',
-					innerHTML: 'Show',
+					innerHTML: t('ui:Show'),
 					onClick: () => enableCharacterRange(range),
 				}),
 				textToNode('<span>&nbsp;&nbsp;</span>'),
@@ -246,7 +251,7 @@ function makeHiddenRangesTable() {
 				actions.appendChild(
 					makeElement({
 						tag: 'a',
-						innerHTML: 'Remove',
+						innerHTML: t('ui:Remove'),
 						onClick: () => removeCharacterRange(range),
 					})
 				);
@@ -254,7 +259,7 @@ function makeHiddenRangesTable() {
 				actions.appendChild(
 					makeElement({
 						tag: 'a',
-						innerHTML: 'Delete',
+						innerHTML: t('ui:Delete'),
 						attributes: { danger: '' },
 						onClick: () => showDeleteCharacterRangeDialog(range),
 					})
@@ -274,7 +279,7 @@ function makeHiddenRangesTable() {
 			rangeTable,
 			textToNode(`
 			<em class="span-all-columns" style="padding-top: 10px;">
-				All characters in this project are members of enabled character ranges.
+				${t('ui:AllEnabledTips')}
 			</em>
 		`)
 		);

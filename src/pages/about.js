@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { emailLink } from '../app/app.js';
 import { getCurrentProjectEditor, getGlyphrStudioApp } from '../app/main.js';
 import { addAsChildren, makeElement } from '../common/dom.js';
@@ -20,7 +21,13 @@ export function makePage_About() {
 		<div class="content__page">
 			<div class="content-page__left-area">
 				<div class="content-page__nav-area">
-					${makeNavButton({ level: 'l1', superTitle: 'PAGE', title: 'About' })}
+					${makeNavButton({
+						level: 'l1',
+						superTitle: 'PAGE',
+						title: 'About',
+						label: t('ui:About'),
+						subLabel: t('ui:PAGE'),
+					})}
 				</div>
 				<div id="content-page__panel"></div>
 			</div>
@@ -199,16 +206,18 @@ export function makeReleaseNote(showLogo = false) {
 	const content = makeElement({
 		innerHTML: `
 		${gsLogo}
-		<h2>Welcome to Glyphr Studio!</h2>
-		<p>
-			You can stay up to date on the latest news over at the
-			<a href="https://www.glyphrstudio.com/blog" target="_blank">Glyphr Studio Blog</a>.
-			We also have a
-			<a href="https://www.glyphrstudio.com/help/tutorial" target="_blank">tutorial</a>
-			over on the Help and Docs site that will help you walk through some of the key steps
-			to designing your first font.
-			<br><br>
-			As always, if you find any bugs, or have an suggestions about functionality, please email us!
+		<h2>${t('ui:welcomeTips')}</h2>
+		<p>${t('ui:learn1')} <a href="https://www.glyphrstudio.com/blog" target="_blank">${t(
+			'ui:learn2'
+		)}</a>${t('ui:learn3')}${t(
+			'ui:learn4'
+		)}<a href="https://www.glyphrstudio.com/help/tutorial" target="_blank">${t(
+			'ui:learn5'
+		)}</a>，${t('ui:learn6')}
+
+		<br><br>
+
+		${t('ui:learn7')}
 			${emailLink()}
 		</p>
 	`,

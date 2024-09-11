@@ -21,7 +21,6 @@ export function makePanel() {
 	let content = makeElement();
 	let panel = editor.nav.panel;
 	// log(`panel: ${panel}`);
-
 	if (panel !== 'Layers') {
 		document.removeEventListener('keydown', handlePanelsKeyPress, false);
 		document.removeEventListener('keyup', handlePanelsKeyUp, false);

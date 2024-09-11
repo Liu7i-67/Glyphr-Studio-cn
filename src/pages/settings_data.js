@@ -5,51 +5,75 @@ export default {
 	project: {
 		name: {
 			label: `Project name`,
+			i18n: 'ui:ProjectName',
 			description: `Name for this project. Can be different than the Font or Font Family name. Also, this will be used as the name of the saved Glyphr Studio Project (.gs2) file.`,
+			descriptionI18n: 'ui:ProjectNameTips',
 		},
 		latestVersion: {
 			label: `Version`,
+			i18n: 'ui:Version',
 			description: `The latest app version that edited this project file.`,
+			descriptionI18n: 'ui:VersionTips',
 			type: `Read only`,
+			typeI18n: 'ui:ReadOnly',
 		},
 		initialVersion: {
 			label: `Initial version`,
+			i18n: 'ui:InitialVersion',
 			description: `The app version this project file was first created with.`,
+			descriptionI18n: 'ui:InitialVersionTips',
 			type: `Read only`,
+			typeI18n: 'ui:ReadOnly',
 		},
 		id: {
 			label: `Project ID`,
+			i18n: 'ui:ProjectID',
 			description: `A unique ID used to identify this project.`,
+			descriptionI18n: 'ui:ProjectIDTips',
 			type: `Read only`,
+			typeI18n: 'ui:ReadOnly',
 		},
 	},
 	font: {
 		family: {
 			label: `Font family`,
+			i18n: 'ui:FontFamily',
 			description: `Base font family name, that will be shared across font styles. This will also be used as the base name for exported font files.`,
+			descriptionI18n: 'ui:font.FontFamilyDescription',
 		},
 		style: {
 			label: `Font style`,
+			i18n: 'ui:font.FontStyle',
 			description: `Describes this font within the overall font family. Usually a combination of how bold this font is and if it is italic.`,
+			descriptionI18n: 'ui:font.FontStyleDescription',
 			example: `Thin, ExtraLight, Light, <strong>Regular</strong>, Medium, SemiBold, <strong>Bold</strong>, ExtraBold, Black <br><br>Thin&nbsp;Italic, ExtraLight&nbsp;Italic, Light&nbsp;Italic, <strong>Italic</strong>, Medium&nbsp;Italic, SemiBold&nbsp;Italic, Bold&nbsp;Italic, ExtraBold&nbsp;Italic, Black&nbsp;Italic`,
+			exampleI18n: 'ui:font.FontStyleExample',
 		},
 		version: {
 			label: `Font version`,
+			i18n: 'ui:font.FontVersion',
 			description: `If this font gets updates regularly, keep track of what version this iteration is. This is recommended to be in Semantic Versioning format, you can learn more at <a href="https://semver.org/" target="_blank">semver.org</a>.`,
+			descriptionI18n: 'ui:font.FontVersionDescription',
 			example: `Version 1.0`,
+			exampleI18n: 'ui:font.FontVersionExample',
 		},
 		description: {
 			label: `Font description`,
+			i18n: 'ui:font.FontDescription',
 			description: `Open-ended text to describe your font.`,
+			descriptionI18n: 'ui:font.FontDescriptionDescription',
 		},
 		panose: {
 			label: `Panose-1`,
+			i18n: 'ui:font.Panose1',
 			description: `PANOSE is a system that uses ten digits to describe the font's visual style.  A good overview can be found on Monotype's GitHub page: <a href="https://monotype.github.io/panose/pan1.htm" target="_blank">monotype.github.io/panose/pan2.htm</a><br>Each digit of the ten digits is separated by a space, and has a special meaning based on its position.`,
+			descriptionI18n: 'ui:font.Panose1Description',
 			example: `<strong>0 0 0 0 0 0 0 0 0 0</strong><br>All zeros describe this font as 'any', which basically leaves it undefined. Use this as your default.
 			<br><br>
 			<strong>2 0 0 0 0 0 0 0 0 0</strong><br>The first digit determines the kind of font family this is, where digit 2 represents Latin typefaces.
 			<br><br>
 			Check out the interactive PANOSE builder to get more details on what each digit means.`,
+			exampleI18n: 'ui:font.Panose1Example',
 		},
 		upm: {
 			label: `Units per Em (UPM)`,

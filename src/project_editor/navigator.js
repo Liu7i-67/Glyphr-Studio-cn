@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { showAppErrorPage } from '../app/app.js';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { makeAppTopBar } from '../app/menu.js';
@@ -37,55 +38,69 @@ export class Navigator {
 			Overview: {
 				pageMaker: makePage_Overview,
 				iconName: 'page_overview',
+				label: t('ui:Overview'),
 			},
 			'Design glyphs': {
 				type: 'subtitle',
+				label: t('ui:DesignGlyphs'),
 			},
 			Characters: {
 				pageMaker: makePage_Characters,
 				iconName: 'page_characters',
+				label: t('ui:Characters'),
 			},
 			Ligatures: {
 				pageMaker: makePage_Ligatures,
 				iconName: 'page_ligatures',
+				label: t('ui:Ligatures'),
 			},
 			Components: {
 				pageMaker: makePage_Components,
 				iconName: 'page_components',
+				label: t('ui:Components'),
 			},
 			Refine: {
 				type: 'subtitle',
+				label: t('ui:Refine'),
 			},
 			Kerning: {
 				pageMaker: makePage_Kerning,
 				iconName: 'page_kerning',
+				label: t('ui:Kerning'),
 			},
 			'Live preview': {
 				pageMaker: makePage_LivePreview,
 				iconName: 'page_livePreview',
+				label: t('ui:LivePreview'),
 			},
 			'Global actions': {
 				pageMaker: makePage_GlobalActions,
 				iconName: 'page_globalActions',
+				label: t('ui:GlobalActions'),
 			},
 			'Settings & more': {
 				type: 'subtitle',
+				label: t('ui:SettingsMore'),
 			},
 			Settings: {
 				pageMaker: makePage_Settings,
 				iconName: 'page_settings',
+				label: t('ui:Settings'),
 			},
 			'Import & export': {
 				pageMaker: false,
 				iconName: 'page_importAndExport',
+				label: t('ui:ImportExport'),
 			},
 			Help: {
 				pageMaker: makePage_Help,
 				iconName: 'page_help',
+				label: t('ui:Help'),
 			},
 			About: {
 				pageMaker: makePage_About,
 				iconName: 'page_about',
+				label: t('ui:About'),
 			},
 		};
 	}
@@ -190,7 +205,6 @@ export function makeNavButton(properties = {}) {
 	let title = properties.title || 't i t l e';
 	let superTitle = properties.superTitle || 's u p e r t i t l e';
 	let level = properties.level || '';
-
 	return `
 		<button
 			data-nav-type="${superTitle}"
@@ -198,7 +212,7 @@ export function makeNavButton(properties = {}) {
 			id="nav-button${level ? `-${level}` : ''}"
 			title="${title}"
 		>
-			${makeNavButtonContent(title, superTitle)}
+			${makeNavButtonContent(properties.label || title, properties.subLabel || superTitle)}
 		</button>
 	`;
 }
@@ -331,10 +345,14 @@ function makePageChooserContent() {
 	Object.keys(toc).forEach((itemName) => {
 		if (toc[itemName]?.type === 'subtitle') {
 			content.appendChild(
-				makeElement({ tag: 'h3', content: itemName, className: 'nav-dropdown__subtitle' })
+				makeElement({
+					tag: 'h3',
+					content: toc[itemName].label,
+					className: 'nav-dropdown__subtitle',
+				})
 			);
 		} else if (itemName !== 'Open project' && toc[itemName].pageMaker) {
-			pageButton = makeNavButton_Page(itemName, toc[itemName].iconName);
+			pageButton = makeNavButton_Page(itemName, toc[itemName].iconName, toc[itemName]);
 			content.appendChild(pageButton);
 		}
 	});
@@ -343,14 +361,16 @@ function makePageChooserContent() {
 	return content;
 }
 
-function makeNavButton_Page(pageName, iconName) {
+function makeNavButton_Page(pageName, iconName, item) {
 	let button = makeElement({
 		tag: 'button',
 		className: 'nav-dropdown__button',
 		attributes: { tabindex: '0' },
 	});
+
 	button.innerHTML += makeIcon({ name: iconName, color: accentColors.blue.l90 });
-	button.appendChild(makeElement({ content: pageName }));
+
+	button.appendChild(makeElement({ content: item.label }));
 	button.addEventListener('click', () => {
 		let editor = getCurrentProjectEditor();
 		if (editor.nav.page !== pageName) {
@@ -394,7 +414,11 @@ function makePanelChooserContent() {
 	}
 
 	shownPanels.forEach((panelName) => {
-		pageButton = makeNavButton_Panel(panels[panelName].name, panels[panelName].iconName);
+		pageButton = makeNavButton_Panel(
+			panels[panelName].name,
+			panels[panelName].iconName,
+			panels[panelName]
+		);
 		content.appendChild(pageButton);
 	});
 
@@ -402,14 +426,14 @@ function makePanelChooserContent() {
 	return content;
 }
 
-function makeNavButton_Panel(panelName, iconName) {
+function makeNavButton_Panel(panelName, iconName, panel) {
 	let button = makeElement({
 		tag: 'button',
 		className: 'nav-dropdown__button',
 		attributes: { tabindex: '0' },
 	});
 	button.innerHTML += makeIcon({ name: iconName, color: accentColors.blue.l90 });
-	button.appendChild(makeElement({ content: panelName }));
+	button.appendChild(makeElement({ content: panel.label || panelName }));
 	button.addEventListener('click', () => {
 		// log(`navButton.click`, 'start');
 		// log(`panelName: ${panelName}`);
@@ -432,26 +456,31 @@ function listOfPanels() {
 			name: 'Attributes',
 			panelMaker: false,
 			iconName: 'panel_attributes',
+			label: t('ui:Attributes'),
 		},
 		Layers: {
 			name: 'Layers',
 			panelMaker: false,
 			iconName: 'panel_layers',
+			label: t('ui:Layers'),
 		},
 		ContextCharacters: {
 			name: 'Context characters',
 			panelMaker: false,
 			iconName: 'panel_contextCharacters',
+			label: t('ui:ContextCharacters'),
 		},
 		History: {
 			name: 'History',
 			panelMaker: false,
 			iconName: 'panel_history',
+			label: t('ui:History'),
 		},
 		Guides: {
 			name: 'Guides',
 			panelMaker: false,
 			iconName: 'panel_guides',
+			label: t('ui:Guides'),
 		},
 	};
 }

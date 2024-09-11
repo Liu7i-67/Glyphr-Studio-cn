@@ -85,6 +85,18 @@
 	color: var(--gray-l85);
 }
 
+.open-project__langs {
+	margin-top: 8px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.open-project__langs button {
+	margin-right: 4px;
+	color: var(--blue-l60);
+}
+
 .open-project__tab-wrapper {
 	width: 400px;
 	position: absolute;

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject } from '../app/main.js';
 import { addAsChildren, makeElement, textToNode } from '../common/dom.js';
 import { showToast } from '../controls/dialogs/dialogs.js';
@@ -38,9 +39,9 @@ export function makePage_Settings() {
 
 	const tabControl = new TabControl(rightArea);
 
-	tabControl.registerTab('Project', makeSettingsTabContentProject());
-	tabControl.registerTab('Font', makeSettingsTabContentFont());
-	tabControl.registerTab('App', makeSettingsTabContentApp());
+	tabControl.registerTab('Project', makeSettingsTabContentProject(), t('ui:Project'));
+	tabControl.registerTab('Font', makeSettingsTabContentFont(), t('ui:Font'));
+	tabControl.registerTab('App', makeSettingsTabContentApp(), t('ui:App'));
 
 	addAsChildren(panelArea, tabControl.makeTabs());
 	tabControl.selectTab('Project');
@@ -74,8 +75,10 @@ export function makeOneSettingsRow(groupName, propertyName, callback) {
 	const settingValue = settings[groupName][propertyName];
 	// log(`thisSetting: ${thisSetting}`);
 	// log(`settingValue: ${settingValue}`);
-
 	let displayLabel = thisSetting.label;
+	if (thisSetting.i18n) {
+		displayLabel = t(thisSetting.i18n);
+	}
 	displayLabel = displayLabel.replaceAll(' ', '&nbsp;');
 	displayLabel = displayLabel.replaceAll('-', '&#8209;');
 	displayLabel = `${displayLabel}:&emsp;`;
@@ -98,7 +101,7 @@ export function makeOneSettingsRow(groupName, propertyName, callback) {
 			// @ts-ignore
 			let newValue = parseInt(event.target.value);
 			if (isNaN(newValue)) {
-				showToast(`Could not save value - needs to be a number.`);
+				showToast(t('ui:CouldNotSave'));
 			} else {
 				settings[groupName][propertyName] = newValue;
 			}
@@ -123,10 +126,16 @@ export function makeOneSettingsRow(groupName, propertyName, callback) {
 	if (settingType === 'Boolean') {
 		input = makeDirectCheckbox(settings[groupName], propertyName, callback);
 	} else {
+		let typeHtml = settingType || t('ui:Text');
+
+		if (thisSetting?.typeI18n) {
+			typeHtml = t(thisSetting.typeI18n);
+		}
+
 		type = makeElement({
 			tag: 'pre',
-			innerHTML: settingType || 'Text',
-			title: `Expected value type`,
+			innerHTML: typeHtml,
+			title: t('ui:ExpectedValueType'),
 		});
 	}
 
@@ -141,15 +150,26 @@ export function makeOneSettingsRow(groupName, propertyName, callback) {
 
 	let info;
 	if (thisSetting?.description) {
+		let infoHTML = thisSetting.description || `${groupName}.${propertyName}`;
+
+		if (thisSetting?.descriptionI18n) {
+			infoHTML = t(thisSetting.descriptionI18n);
+		}
+
 		info = makeElement({
 			tag: 'info-bubble',
-			innerHTML: thisSetting?.description || `${groupName}.${propertyName}`,
+			innerHTML: infoHTML,
 		});
 
 		if (thisSetting?.example) {
+			let exampleHTML = thisSetting.example;
+			if (thisSetting?.exampleI18n) {
+				exampleHTML = t(thisSetting.exampleI18n);
+			}
+
 			info.innerHTML += `
-			<h4>Example</h4>
-			${thisSetting.example}
+			<h4>${t('ui:Example')}</h4>
+			${exampleHTML}
 			`;
 		}
 	} else {

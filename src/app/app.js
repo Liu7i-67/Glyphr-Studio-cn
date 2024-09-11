@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { makeElement } from '../common/dom.js';
 import { countItems } from '../common/functions.js';
 import { closeEveryTypeOfDialog, showToast } from '../controls/dialogs/dialogs.js';
@@ -30,7 +31,7 @@ export class GlyphrStudioApp {
 		this.version = config.version;
 		this.versionDate = config.versionDate;
 		const semVer = parseSemVer(config.version);
-		this.versionName = `Version ${semVer.major}.${semVer.minor}`;
+		this.versionName = `${t('ui:Version')} ${semVer.major}.${semVer.minor}`;
 
 		// Project Editors
 		this.projectEditors = [];

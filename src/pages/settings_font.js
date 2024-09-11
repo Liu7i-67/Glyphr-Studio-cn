@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject } from '../app/main';
 import { addAsChildren, makeElement, textToNode } from '../common/dom';
 import { closeEveryTypeOfDialog, showModalDialog } from '../controls/dialogs/dialogs';
@@ -15,11 +16,10 @@ export function makeSettingsTabContentFont() {
 		className: 'settings-page__tab-content settings-table',
 		id: 'tab-content__font',
 		innerHTML: `
-			<h1>Font metadata</h1>
-			<p>
-				These settings will be exported with any font you save,
-				and will be used around Glyphr Studio while you are making edits.
-			</p>
+				<h1>${t('ui:FontMetadata')}</h1>
+				<p>
+					${t('ui:FontMetadataTips')}
+				</p>
 		`,
 	});
 
@@ -73,7 +73,7 @@ export function makeSettingsTabContentFont() {
  * @returns {Array}
  */
 function makePanoseLauncherRow() {
-	const button = makeElement({ tag: 'a', content: 'Launch the interactive PANOSE builder' });
+	const button = makeElement({ tag: 'a', content: t('ui:font.LaunchPANOSE') });
 	button.addEventListener('click', showPanoseBuilderDialog);
 	return [
 		textToNode('<span></span>'),
