@@ -342,6 +342,21 @@ nav .item-chooser__wrapper {
 	margin: 0px 10px 10px 0px;
 }
 
+.item-chooser__tile-page-control button {
+	padding: 4px;
+	margin: 0 0 0 12px;
+}
+
+.item-chooser__tile-page-control input {
+	width: 120px;
+	height: 29px;
+	margin-left: 12px;
+}
+
+.item-chooser__tile-page-total {
+	margin-right: 12px;
+}
+
 /*
 	Kern Group Chooser
 */

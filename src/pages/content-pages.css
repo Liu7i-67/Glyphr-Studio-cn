@@ -175,7 +175,7 @@ code,
 }
 
 .settings-page__tab-content .settings__label {
-	min-width: 80px;
+	width: max-content;
 	padding-top: 2px;
 	line-height: 24px;
 }
