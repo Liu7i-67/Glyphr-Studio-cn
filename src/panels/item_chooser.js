@@ -1,8 +1,6 @@
-import { t } from 'i18next';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { addAsChildren, makeElement } from '../common/dom.js';
 import { countItems } from '../common/functions.js';
-import { showToast } from '../controls/dialogs/dialogs.js';
 import { GlyphTile } from '../controls/glyph-tile/glyph_tile.js';
 import { showAddComponentDialog } from '../pages/components.js';
 import { makeKernGroupCharChips, showAddEditKernGroupDialog } from '../pages/kerning.js';
@@ -13,7 +11,7 @@ import { showAddLigatureDialog } from '../pages/ligatures.js';
 // --------------------------------------------------------------
 
 // --------------------------------------------------------------
-// Glyph chooser
+// Character chooser
 // --------------------------------------------------------------
 
 let savedClickHandler;
@@ -44,8 +42,8 @@ export function makeAllItemTypeChooserContent(
 		// Component Chooser
 		wrapper.appendChild(makeComponentChooserTileGrid(editor, !isSecondaryProject));
 	} else {
-		// Overview and Glyph = Glyph Chooser
-		wrapper.appendChild(makeGlyphChooserTileGrid(editor, !isSecondaryProject));
+		// Overview and Character = Character Chooser
+		wrapper.appendChild(makeCharacterChooserTileGrid(editor, !isSecondaryProject));
 	}
 
 	// log(`makeAllItemTypeChooserContent`, 'end');
@@ -93,12 +91,11 @@ export function makeSingleItemTypeChooserContent(itemPageName, clickHandler) {
 			})
 		);
 	} else {
-		// Glyph Chooser
+		// Character Chooser
 		let header = makeElement({ tag: 'div', className: 'item-chooser__header' });
 		wrapper.appendChild(header);
 		header.appendChild(makeRangeChooser());
-
-		wrapper.appendChild(makeGlyphChooserTileGrid());
+		wrapper.appendChild(makeCharacterChooserTileGrid());
 	}
 
 	// log(`makeSingleItemTypeChooserContent`, 'end');
@@ -207,7 +204,7 @@ function addRangeOptionsToOptionChooser(optionChooser, editor = getCurrentProjec
 				tileGrid.remove();
 				let wrapper = document.querySelector('.item-chooser__wrapper');
 				// log(wrapper);
-				wrapper.appendChild(makeGlyphChooserTileGrid());
+				wrapper.appendChild(makeCharacterChooserTileGrid());
 			});
 
 			optionChooser.appendChild(option);
@@ -215,184 +212,55 @@ function addRangeOptionsToOptionChooser(optionChooser, editor = getCurrentProjec
 	});
 }
 
-function makeOnTile(charID, editor = getCurrentProjectEditor(), showSelected = true) {
-	const glyphID = `glyph-${charID}`;
-	// log(`glyphID: ${glyphID}`);
-	let oneTile = new GlyphTile({ 'displayed-item-id': glyphID, project: editor.project });
-	if (showSelected && editor.selectedGlyphID === glyphID) {
-		oneTile.setAttribute('selected', '');
-	}
-
-	oneTile.addEventListener('click', () => savedClickHandler(glyphID));
-
-	if (savedRegisterSubscriptions) {
-		editor.subscribe({
-			topic: 'whichGlyphIsSelected',
-			subscriberID: `glyphTile.${glyphID}`,
-			callback: (newGlyphID) => {
-				if (parseInt(newGlyphID) === parseInt(glyphID)) {
-					if (showSelected) oneTile.setAttribute('selected', '');
-				} else {
-					oneTile.removeAttribute('selected');
-				}
-			},
-		});
-	}
-	return oneTile;
-}
-
-function renderOtherPageGlyph(editor = getCurrentProjectEditor(), showSelected = true, page) {
-	if (editor.charDisplayInfo.current === page) return;
-	editor.updateCurrentPage(page);
-
-	let rangeArray = editor.selectedCharacterRange.getMemberIDs(
-		editor.project.settings.app.showNonCharPoints
-	);
-
-	const showArray = rangeArray.slice(
-		(editor.charDisplayInfo.current - 1) * editor.charDisplayInfo.pageSize,
-		editor.charDisplayInfo.current * editor.charDisplayInfo.pageSize
-	);
-
-	let tileGrid = makeElement({ tag: 'div', className: 'item-chooser__tile-grid' });
-
-	if (showArray?.length) {
-		showArray.forEach((charID) => {
-			let oneTile = makeOnTile(charID, editor, showSelected);
-			tileGrid.appendChild(oneTile);
-		});
-	}
-
-	document
-		.querySelector('.item-chooser__tile-grid-box')
-		.replaceChild(tileGrid, document.querySelector('.item-chooser__tile-grid'));
-
-	document.querySelector(
-		'.item-chooser__tile-page-num'
-	).innerHTML = `${editor.charDisplayInfo.current}`;
-}
-
-function makePageBarControl(editor = getCurrentProjectEditor(), showSelected = true) {
-	const pagingControl = makeElement({
-		tag: 'div',
-		className: 'item-chooser__tile-page-control',
-	});
-
-	const totalInfo = makeElement({
-		tag: 'span',
-		className: 'item-chooser__tile-page-total',
-		innerHTML: `${t('ui:paging.total')}${editor.charDisplayInfo.page}${t('ui:paging.page')}`,
-	});
-	pagingControl.append(totalInfo);
-
-	const currenInfo = makeElement({
-		tag: 'span',
-	});
-	const currenInfoPre = makeElement({
-		tag: 'span',
-		innerHTML: `${t('ui:paging.current')}`,
-	});
-	currenInfo.append(currenInfoPre);
-	const currenInfoNum = makeElement({
-		tag: 'span',
-		className: 'item-chooser__tile-page-num',
-		innerHTML: `${editor.charDisplayInfo.current}`,
-	});
-	currenInfo.append(currenInfoNum);
-	const currenInfoSuf = makeElement({
-		tag: 'span',
-		innerHTML: `${t('ui:paging.page')}`,
-	});
-	currenInfo.append(currenInfoSuf);
-	pagingControl.append(currenInfo);
-
-	const prevButton = makeElement({
-		tag: 'button',
-		innerHTML: `${t('ui:paging.prev')}`,
-	});
-	prevButton.addEventListener('click', () => {
-		if (editor.charDisplayInfo.current === 1) {
-			showToast(`${t('ui:paging.noPrev')}`);
-			return;
-		}
-		renderOtherPageGlyph(editor, showSelected, editor.charDisplayInfo.current - 1);
-	});
-	pagingControl.append(prevButton);
-
-	const nextButton = makeElement({
-		tag: 'button',
-		innerHTML: `${t('ui:paging.next')}`,
-	});
-	nextButton.addEventListener('click', () => {
-		if (editor.charDisplayInfo.current === editor.charDisplayInfo.page) {
-			showToast(`${t('ui:paging.noNext')}`);
-			return;
-		}
-		renderOtherPageGlyph(editor, showSelected, editor.charDisplayInfo.current + 1);
-	});
-	pagingControl.append(nextButton);
-
-	const jumpInput = makeElement({
-		tag: 'input',
-		attributes: {
-			placeholder: `${t('ui:paging.jumpText')}`,
-		},
-	});
-	jumpInput.addEventListener('keydown', (e) => {
-		if (e.code === 'Enter') {
-			// @ts-ignore
-			const page = Math.floor(+e.target.value);
-			if (page > editor.charDisplayInfo.page || page < 1) {
-				showToast(`${t('ui:paging.invalid')}`);
-				return;
-			}
-
-			// @ts-ignore
-			e.target.value = '';
-			renderOtherPageGlyph(editor, showSelected, page);
-		}
-	});
-	pagingControl.append(jumpInput);
-
-	return pagingControl;
-}
-
-function makeGlyphChooserTileGrid(editor = getCurrentProjectEditor(), showSelected = true) {
-	// log(`makeGlyphChooserTileGrid`, 'start');
-	// console.time('makeGlyphChooserTileGrid');
+function makeCharacterChooserTileGrid(editor = getCurrentProjectEditor(), showSelected = true) {
+	// log(`makeCharacterChooserTileGrid`, 'start');
+	// console.time('makeCharacterChooserTileGrid');
 	// log(editor.project.settings.project.characterRanges);
 	// log(editor.selectedCharacterRange);
 
-	let tileGridBox = makeElement({ tag: 'div', className: 'item-chooser__tile-grid-box' });
-
 	let tileGrid = makeElement({ tag: 'div', className: 'item-chooser__tile-grid' });
 	let rangeArray = editor.selectedCharacterRange.getMemberIDs(
 		editor.project.settings.app.showNonCharPoints
 	);
-	editor.updatacharDisplayInfo(rangeArray.length);
-	let showArray = rangeArray;
 
-	if (showArray.length > editor.charDisplayInfo.pageSize) {
-		showArray = showArray.slice(0, editor.charDisplayInfo.pageSize);
-	}
+	if (rangeArray?.length) {
+		const pagedCharacters = getItemsFromPage(rangeArray, editor.chooserPage.characters, editor);
+		if (rangeArray.length > pagedCharacters.length) {
+			tileGrid.appendChild(makePageControl('characters', rangeArray, editor));
+		}
+		pagedCharacters.forEach((charID) => {
+			const glyphID = `glyph-${charID}`;
+			// log(`glyphID: ${glyphID}`);
+			let oneTile = new GlyphTile({ 'displayed-item-id': glyphID, project: editor.project });
+			if (showSelected && editor.selectedGlyphID === glyphID) {
+				oneTile.setAttribute('selected', '');
+			}
 
-	if (showArray?.length) {
-		showArray.forEach((charID) => {
-			let oneTile = makeOnTile(charID, editor, showSelected);
+			oneTile.addEventListener('click', () => savedClickHandler(glyphID));
+
+			if (savedRegisterSubscriptions) {
+				editor.subscribe({
+					topic: 'whichGlyphIsSelected',
+					subscriberID: `glyphTile.${glyphID}`,
+					callback: (newGlyphID) => {
+						// log('whichGlyphIsSelected subscriber callback');
+						// log(`checking if ${newGlyphID} === ${glyphID}`);
+						if (parseInt(newGlyphID) === parseInt(glyphID)) {
+							// log(`Callback: setting ${oneTile.getAttribute('glyph')} attribute to selected`);
+							if (showSelected) oneTile.setAttribute('selected', '');
+						} else {
+							// log(`Callback: removing ${oneTile.getAttribute('glyph')} attribute selected`);
+							oneTile.removeAttribute('selected');
+						}
+					},
+				});
+			}
 			tileGrid.appendChild(oneTile);
 		});
 	}
 
-	if (editor.charDisplayInfo.page > 1) {
-		const pagingBar = makePageBarControl(editor, showSelected);
-
-		tileGridBox.appendChild(tileGrid);
-		tileGridBox.appendChild(pagingBar);
-		return tileGridBox;
-	}
-
-	// console.timeEnd('makeGlyphChooserTileGrid');
-	// log(`makeGlyphChooserTileGrid`, 'end');
+	// console.timeEnd('makeCharacterChooserTileGrid');
+	// log(`makeCharacterChooserTileGrid`, 'end');
 	return tileGrid;
 }
 
@@ -569,6 +437,7 @@ function getItemsFromPage(itemsArray = [], pageNumber = 0, editor = getCurrentPr
 
 function makePageControl(area, allItems = [], editor = getCurrentProjectEditor()) {
 	const refreshFunctions = {
+		characters: makeCharacterChooserTileGrid,
 		ligatures: makeLigatureChooserTileGrid,
 		components: makeComponentChooserTileGrid,
 		kerning: makeKernGroupChooserList,

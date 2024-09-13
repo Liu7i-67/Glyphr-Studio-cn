@@ -32,7 +32,7 @@ export function makePage_Overview() {
 	// log(content);
 
 	let itemsContent = makeAllItemTypeChooserContent((itemID) => {
-		// log(`Overview page - Glyph Chooser tile click handler`, 'start');
+		// log(`Overview page - Character Chooser tile click handler`, 'start');
 		// log(`itemID: ${itemID}`);
 
 		const editor = getCurrentProjectEditor();
@@ -47,7 +47,7 @@ export function makePage_Overview() {
 		editor.navigate();
 
 		editor.history.addState(`Navigated to ${editor.project.getItemName(itemID, true)}`);
-		// log(`Overview page - Glyph Chooser tile click handler`, 'end');
+		// log(`Overview page - Character Chooser tile click handler`, 'end');
 	});
 
 	const project = getCurrentProject();

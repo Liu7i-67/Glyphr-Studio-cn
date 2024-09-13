@@ -229,7 +229,7 @@
 		"exportKerning": "Export Kern information to fonts (.svg only)",
 		"exportKerningDescription": "Uncheck this option if don't want kern data exported to fonts.",
 		"exportUneditedItems": "Export items that were created, but not edited",
-		"exportUneditedItemsDescription": "When you create a Ligature or Component, or navigate to a Character, an empty glyph item is created for you. It's possible to leave these items in an unedited state, essentially empty.<br><br>If this option is checked, these empty items will be exported to fonts. If this option is unchecked, these empty items will be filtered out, and not exported to fonts.<br><br>In the glyph chooser, these empty items' names are shown in a green color.",
+		"exportUneditedItemsDescription": "When you create a Ligature or Component, or navigate to a Character, an empty glyph item is created for you. It's possible to leave these items in an unedited state, essentially empty.<br><br> If this option is checked, these empty items will be exported to fonts. If this option is unchecked, these empty items will be filtered out, and not exported to fonts.<br><br> In the item chooser, these empty items' names are shown in a green color.",
 		"moveShapesOnSVGDragDrop": "Move shapes when drag+dropping an SVG file",
 		"moveShapesOnSVGDragDropDescription": "When importing SVG by dragging and dropping a .svg file onto the canvas, move the imported shapes to the origin (x = 0, y = shapes height)."
 	}
