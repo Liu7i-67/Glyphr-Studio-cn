@@ -20,7 +20,13 @@ export function makePage_Overview() {
 		<div class="content__page">
 			<div class="content-page__left-area">
 				<div class="content-page__nav-area">
-					${makeNavButton({ level: 'l1', superTitle: 'PAGE', title: 'Overview' })}
+					${makeNavButton({
+						level: 'l1',
+						superTitle: 'PAGE',
+						superTitleI18n: t('ui:PAGE'),
+						title: 'Overview',
+						titleI18n: t('ui:Overview'),
+					})}
 				</div>
 				<div id="content-page__panel"></div>
 			</div>

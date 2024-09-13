@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProjectEditor } from '../app/main.js';
 import { accentColors } from '../common/colors.js';
 import { addAsChildren, makeElement } from '../common/dom.js';
@@ -16,13 +17,15 @@ export function makeCard_pathPointAttributes(selectedPoint) {
 	let pathPointCard = makeElement({
 		tag: 'div',
 		className: 'panel__card',
-		innerHTML: `<h3>Path point ${selectedPoint.pointNumber + 1} ${selectedPoint.ident || ''}</h3>`,
+		innerHTML: `<h3>${t('ui:path.pathPoint')} ${selectedPoint.pointNumber + 1} ${
+			selectedPoint.ident || ''
+		}</h3>`,
 	});
 
 	// -- Point -- //
 	// Point x/y
-	let pointPosition = makeInputs_position(selectedPoint.p, 'point');
-	let pointTypeLabel = makeSingleLabel('point type');
+	let pointPosition = makeInputs_position(selectedPoint.p, t('ui:path.point'));
+	let pointTypeLabel = makeSingleLabel(t('ui:path.pointType'));
 	let pointTypeWrapper = makeElement();
 
 	addAsChildren(pointTypeWrapper, [
@@ -90,7 +93,7 @@ function makeHandleGroup(h = 'h1', selectedPoint) {
 	if (selectedPoint.type !== 'corner') useHandleCheckbox.setAttribute('disabled', '');
 	addAsChildren(useHandleLabel, [
 		useHandleCheckbox,
-		makeElement({ tag: 'h4', content: `Use handle ${h.charAt(1)}` }),
+		makeElement({ tag: 'h4', content: `${t('ui:path.useHandle')} ${h.charAt(1)}` }),
 	]);
 
 	// Inputs
@@ -177,7 +180,7 @@ export function makePointTypeButton(type, selected, clickHandler) {
 		className: 'pointTypeButton',
 		id: `pointTypeButton-${type}`,
 		attributes: {
-			title: `point type: ${type}`,
+			title: `${t('ui:path.pointType')}: ${t(`ui:path.${type}`)}`,
 		},
 	});
 

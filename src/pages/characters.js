@@ -40,20 +40,20 @@ export function makePage_Characters() {
 						level: 'l1',
 						superTitle: 'PAGE',
 						title: 'Characters',
-						label: t('ui:Characters'),
-						subLabel: t('ui:PAGE'),
+						titleI18n: t('ui:Characters'),
+						superTitleI18n: t('ui:PAGE'),
 					})}
 					${makeNavButton({
 						level: 'l2',
 						superTitle: 'EDITING',
-						subLabel: t('ui:EDITING'),
+						superTitleI18n: t('ui:EDITING'),
 						title: editor.project.getItemName(editor.selectedGlyphID, true),
 					})}
 					${makeNavButton({
 						level: 'l3',
 						superTitle: 'PANEL',
-						subLabel: t('ui:PANEL'),
-						title: editor.nav.panel,
+						superTitleI18n: t('ui:PANEL'),
+						title: editor.nav.panelI18n || editor.nav.panel,
 					})}
 				</div>
 				<div id="editor-page__panel"></div>

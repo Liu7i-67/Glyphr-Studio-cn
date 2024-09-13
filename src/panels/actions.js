@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { addCrossProjectCopyShapeOptionControls } from '../app/cross_project_actions/action_copy_shapes.js';
 import { getCurrentProjectEditor, getGlyphrStudioApp } from '../app/main.js';
 import { getFilesFromFilePicker } from '../app/open_project.js';
@@ -64,7 +65,7 @@ export function getActionData(name) {
 			{
 				iconName: 'copy',
 				iconOptions: !clipBoardShapes,
-				title: `Copy\nAdds the selected shape(s) to the clipboard.`,
+				title: t('ui:character.action.copy'),
 				disabled: !editor.multiSelect.shapes.length,
 				id: 'actionButtonCopy',
 				onClick: clipboardCopy,
@@ -88,7 +89,7 @@ export function getActionData(name) {
 			{
 				iconName: 'undo',
 				iconOptions: !historyLength,
-				title: `Undo\nStep backwards in time one action.`,
+				title: t('ui:character.action.undo'),
 				disabled: !historyLength,
 				id: 'actionButtonUndo',
 				onClick: () => {
@@ -100,7 +101,7 @@ export function getActionData(name) {
 		if (editor.nav.page === 'Components') {
 			actionData.push({
 				iconName: 'linkToGlyph',
-				title: `Link to Glyph\nChoose a glyph, and add this Component to that glyph as a Component Instance.`,
+				title: t('ui:character.action.linkToGlyph'),
 				onClick: () => {
 					showDialogChooseOtherItem('linkAsComponent');
 				},
@@ -114,7 +115,7 @@ export function getActionData(name) {
 			{
 				iconName: 'addPath',
 				iconOptions: false,
-				title: `Add Path\nCreates a new default path and adds it to this glyph.`,
+				title: t('ui:character.action.addPath'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let newPath = editor.selectedItem.addOneShape(rectPathFromMaxes());
@@ -127,21 +128,21 @@ export function getActionData(name) {
 			{
 				iconName: 'addPath',
 				iconOptions: true,
-				title: `Add Component Instance\nChoose another Component or Glyph, and use it as a Component Instance in this glyph.`,
+				title: t('ui:character.action.addPathTure'),
 				onClick: () => {
 					showDialogChooseOtherItem('addAsComponentInstance');
 				},
 			},
 			{
 				iconName: 'pastePathsFromAnotherGlyph',
-				title: `Get Paths\nChoose another Glyph, and copy all the paths from that glyph to this one.`,
+				title: t('ui:character.action.pastePathsFromAnotherGlyph'),
 				onClick: () => {
 					showDialogChooseOtherItem('copyPaths');
 				},
 			},
 			{
 				iconName: 'pastePathsFromAnotherProject',
-				title: `Get Paths From Another Project\nChoose another Glyph from the other open project, and copy all the paths from that glyph to this one.`,
+				title: t('ui:character.action.pastePathsFromAnotherProject'),
 				onClick: () => {
 					showDialogChooseItemFromOtherProject();
 				},
@@ -155,7 +156,7 @@ export function getActionData(name) {
 		actionData = [
 			{
 				iconName: 'flipHorizontal',
-				title: `Flip Vertical\nReflects the glyph vertically.`,
+				title: t('ui:character.action.flipHorizontal'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					editor.selectedItem.flipEW();
@@ -165,7 +166,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'flipVertical',
-				title: `Flip Horizontal\nReflects the glyph horizontally.`,
+				title: t('ui:character.action.flipVertical'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					editor.selectedItem.flipNS();
@@ -175,7 +176,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'round',
-				title: `Round all path point and handle position values\nIf a x or y value for any point or a handle in the path has decimals, it will be rounded to the nearest whole number.`,
+				title: t('ui:character.action.round'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					editor.selectedItem.roundAll();
@@ -189,13 +190,13 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'combine_unite',
-				title: `Combine all paths: Unite\nMerges all paths in this glyph into as few paths as possible.`,
+				title: t('ui:character.action.combine_unite'),
 				disabled: editor.selectedItem?.shapes?.length < 2,
 				onClick: combineUniteAllGlyphPaths,
 			},
 			{
 				iconName: 'deleteGlyph',
-				title: `Delete Glyph\nRemove this Glyph from the project. \nDon't worry, you can undo this action.`,
+				title: t('ui:character.action.deleteGlyph'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					const name = editor.selectedItem.name;
@@ -212,7 +213,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'exportGlyphSVG',
-				title: `Export glyph SVG File\nGenerate a SVG file that only includes the SVG outline for this glyph. This file can be dragged and dropped directly to another Glyphr Studio project edit canvas, allowing for copying glyph paths between projects.`,
+				title: t('ui:character.action.exportGlyphSVG'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let content = makeGlyphSVGforExport(editor.selectedItem);
@@ -222,7 +223,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'importGlyphSVG',
-				title: `Import paths from a SVG File\nUsing the file picker dialog, select a SVG file. Outlines will be imported and added to this glyph.\nYou can also just drag and drop a SVG file onto the edit canvas to import it.`,
+				title: t('ui:character.action.importGlyphSVG'),
 				onClick: async () => {
 					getFilesFromFilePicker(
 						async (files) => {
@@ -247,7 +248,10 @@ export function getActionData(name) {
 
 							if (fileSuffix === 'svg') {
 								reader.onload = function () {
-									importSVGtoCurrentItem(reader.result.toString(), '<br>from the imported SVG file');
+									importSVGtoCurrentItem(
+										reader.result.toString(),
+										'<br>from the imported SVG file'
+									);
 								};
 
 								reader.readAsText(file);
@@ -280,19 +284,19 @@ export function getActionData(name) {
 			{
 				iconName: 'copy',
 				iconOptions: !clipBoardShapes,
-				title: `Copy\nAdds the selected shape(s) to the clipboard.`,
+				title: t('ui:character.action.copy'),
 				id: 'actionButtonCopyPath',
 				onClick: clipboardCopy,
 			},
 			{
 				iconName: 'deletePath',
-				title: 'Delete\nRemoves the currently selected shape(s) from this glyph.',
+				title: t('ui:character.action.deletePath'),
 				onClick: deleteSelectedPaths,
 			},
 			{
 				iconName: 'switchPathComponent',
 				iconOptions: false,
-				title: `Turn Path into a Component Instance\nTakes the selected path and creates a Component out of it,\nthen links that Component to this glyph as a Component Instance.`,
+				title: t('ui:character.action.switchPathComponent'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					editor.history.addWholeProjectChangePreState('Turned a path into a component instance');
@@ -323,7 +327,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'flipHorizontal',
-				title: 'Flip Horizontal\nReflects the currently selected shape(s) horizontally.',
+				title: t('ui:character.action.pathFlipHorizontal'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let shape = editor.multiSelect.shapes.virtualGlyph;
@@ -334,7 +338,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'flipVertical',
-				title: 'Flip Vertical\nReflects the currently selected shape(s) vertically',
+				title: t('ui:character.action.pathFlipVertical'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let shape = editor.multiSelect.shapes.virtualGlyph;
@@ -345,7 +349,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'round',
-				title: `Round all path point and handle position values\nIf a x or y value for any point or a handle in the path has decimals, it will be rounded to the nearest whole number.`,
+				title: t('ui:character.action.round'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let shape = editor.multiSelect.shapes.virtualGlyph;
@@ -447,7 +451,7 @@ export function getActionData(name) {
 		actionData = [
 			{
 				iconName: 'moveLayerUp',
-				title: `Move Path Up\nMoves the path up in the path layer order.`,
+				title: t('ui:character.action.moveLayerUp'),
 				disabled: selectedPaths.length !== 1,
 				onClick: () => {
 					moveLayer('up');
@@ -458,7 +462,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'moveLayerDown',
-				title: `Move Path Down\nMoves the path down in the path layer order.`,
+				title: t('ui:character.action.moveLayerDown'),
 				disabled: selectedPaths.length !== 1,
 				onClick: () => {
 					moveLayer('down');
@@ -1031,19 +1035,19 @@ function updateClipboardActionIcons(numberOfClipboardItems = 0) {
 }
 
 export function makeActionButtonPasteTooltip(clipBoardPathCount) {
-	let re = `Paste\nAdds the previously-copied shape(s) into this glyph.\n\n`;
-	re += `Currently ${clipBoardPathCount} Path${
-		clipBoardPathCount === 1 ? '' : 's'
-	} on the clipboard.`;
+	let re = `${t('ui:character.action.pasteTooltip1')}`;
+	re += `${t('ui:character.action.pasteTooltip2')}${clipBoardPathCount}${t(
+		'ui:character.action.pasteTooltip3'
+	)}${clipBoardPathCount === 1 ? '' : 's'}${t('ui:character.action.pasteTooltip4')}`;
 	return re;
 }
 
 export function makeActionButtonClearClipboardTooltip(clipBoardPathCount) {
-	let re = `Clear Glyphr Studio Clipboard\n`;
-	re += `In order to use your Operating System clipboard for copy / paste, the Glyphr Studio clipboard must be empty.\n\n`;
-	re += `Currently ${clipBoardPathCount} Path${
-		clipBoardPathCount === 1 ? '' : 's'
-	} on the clipboard.`;
+	let re = `${t('ui:character.action.clearTooltip1')}`;
+	re += `${t('ui:character.action.clearTooltip2')}`;
+	re += `${t('ui:character.action.clearTooltip3')}${clipBoardPathCount}${t(
+		'ui:character.action.clearTooltip4'
+	)}${clipBoardPathCount === 1 ? '' : 's'}${t('ui:character.action.clearTooltip5')}`;
 	return re;
 }
 

@@ -134,33 +134,6 @@ export class ProjectEditor {
 		// log(`\n⮟ProjectEditor⮟`);
 		// log(this);
 		// log('ProjectEditor.constructor', 'end');
-
-		// 字符展示信息
-		this.charDisplayInfo = {
-			page: 1,
-			pageSize: 220,
-			current: 1,
-		};
-	}
-
-	/**
-	 * 更新页码信息
-	 * @param {number} page
-	 */
-	updateCurrentPage(page) {
-		this.charDisplayInfo.current = page;
-	}
-
-	/**
-	 * 更新分页信息
-	 * @param {number} total
-	 */
-	updatacharDisplayInfo(total) {
-		this.charDisplayInfo = {
-			page: Math.ceil(total / this.charDisplayInfo.pageSize),
-			pageSize: 220,
-			current: 1,
-		};
 	}
 
 	// --------------------------------------------------------------

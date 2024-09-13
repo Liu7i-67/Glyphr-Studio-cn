@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { makeElement } from '../common/dom.js';
 import { round, transformOrigins } from '../common/functions.js';
@@ -50,7 +51,7 @@ export function makeInputs_size(item, disabled = false) {
 	let thisTopic = `current${item.objType}`;
 
 	// Width and Height
-	let dimensionLabel = makeSingleLabel(`width${dimSplit()}height`);
+	let dimensionLabel = makeSingleLabel(`${t('ui:width')}${dimSplit()}${t('ui:height')}`);
 	let dimensionInputs = makeElement({ tag: 'div', className: 'doubleInput' });
 	let wInput = makeSingleInput(item, 'width', thisTopic, 'input-number');
 	let hInput = makeSingleInput(item, 'height', thisTopic, 'input-number');
@@ -79,12 +80,8 @@ export function makeInputs_size(item, disabled = false) {
 		];
 		displayOrigins = transformOrigins;
 		let transformLabel = makeSingleLabel(
-			'transform origin',
-			`With increases or decreases to width or height,
-		the transform origin is the point that stays fixed.
-		<br><br>
-		This only takes effect when directly entering values
-		into the width or height inputs.`
+			t('ui:bulkEditPaths.transformOrigin'),
+			t('ui:bulkEditPaths.transformOriginTips')
 		);
 		let transformInput = makeElement({
 			tag: 'option-chooser',
@@ -108,14 +105,8 @@ export function makeInputs_size(item, disabled = false) {
 
 		// Ratio lock checkbox
 		let ratioLockLabel = makeSingleLabel(
-			'lock aspect ratio',
-			`
-			When either the width or height is adjusted,
-			the overall size will be kept proportional.
-			<br><br>
-			Maintaining aspect ratio will override value
-			locks if need be.
-		`
+			t('ui:bulkEditPaths.lockAspectRatio'),
+			t('ui:bulkEditPaths.lockAspectRatioTips')
 		);
 		let ratioLockCheckbox = makeSingleCheckbox(item, 'ratioLock', thisTopic);
 
@@ -364,7 +355,7 @@ export function dimSplitElement() {
 // 'direct' controls that don't use pub/sub
 // --------------------------------------------------------------
 
-export function makeDirectCheckbox(item, property, callback, id=false) {
+export function makeDirectCheckbox(item, property, callback, id = false) {
 	let newCheckbox = makeElement({
 		tag: 'input',
 		attributes: { type: 'checkbox' },

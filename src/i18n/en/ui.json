@@ -112,6 +112,8 @@
 	"Number": "Number",
 	"Degree": "Degree",
 	"Boolean": "Boolean",
+	"width": "width",
+	"height": "height",
 	"font": {
 		"FontFamilyDescription": "Base font family name, that will be shared across font styles. This will also be used as the base name for exported font files.",
 		"FontStyle": "Font style",
@@ -185,17 +187,6 @@
 		"overlineThickness": "Overline thickness",
 		"overlineThicknessDescription": "The ideal height of an overline."
 	},
-	"paging": {
-		"total": "Total:",
-		"page": " page",
-		"current": "Current: no ",
-		"prev": "Previous page",
-		"noPrev": "There is no previous page.",
-		"next": "Next page",
-		"noNext": "There is no next page.",
-		"jumpText": "Jump to the specified page",
-		"invalid": "Invalid page number."
-	},
 	"app": {
 		"preferences": "App preferences",
 		"tips": "These settings adjust how the Glyphr Studio App behaves.",
@@ -232,5 +223,91 @@
 		"exportUneditedItemsDescription": "When you create a Ligature or Component, or navigate to a Character, an empty glyph item is created for you. It's possible to leave these items in an unedited state, essentially empty.<br><br> If this option is checked, these empty items will be exported to fonts. If this option is unchecked, these empty items will be filtered out, and not exported to fonts.<br><br> In the item chooser, these empty items' names are shown in a green color.",
 		"moveShapesOnSVGDragDrop": "Move shapes when drag+dropping an SVG file",
 		"moveShapesOnSVGDragDropDescription": "When importing SVG by dragging and dropping a .svg file onto the canvas, move the imported shapes to the origin (x = 0, y = shapes height)."
+	},
+	"glyph": {
+		"advanceWidth": "advance width",
+		"autoAdvanceWidth": "Auto-fit advance width\nThe advance width will be set to the x-max of the paths in this glyph.",
+		"bearingsLeft": "bearings: left",
+		"bearingsRight": "right",
+		"sideBearings": "Side Bearings",
+		"sideBearingsTips": "Side bearings are the blank space to the left and right<br/>of shapes in a glyph. The open space between<br/>characters is very important for legibility.",
+		"sideBearingsTips2": "These are calculated values based on shape positions<br/>and the Advance Width. They are not properties that are<br/>saved with the glyph, but it's helpful to think about<br/>them as if they were.",
+		"leftSideBearing": "Left side bearing",
+		"leftSideBearingTips": "Distance from x=0 to the leftmost side of shapes in the<br/>glyph. Editing this will move all the shapes in the glyph,<br/>and update the Advance Width.",
+		"rightSideBearing": "Right side bearing",
+		"rightSideBearingTips": "Distance from the rightmost side of shapes in the glyph<br/>to the Advance Width."
+	},
+	"character": {
+		"option": {
+			"newRectangle": "New rectangle",
+			"newOval": "New oval",
+			"newPath": "New path",
+			"pathAddPoint": "Add path point",
+			"pathEdit": "Path edit",
+			"resize": "Resize"
+		},
+		"action": {
+			"copy": "Copy\nAdds the selected shape(s) to the clipboard.",
+			"undo": "Undo\nStep backwards in time one action.",
+			"linkToGlyph": "Link to Glyph\nChoose a glyph, and add this Component to that glyph as a Component Instance.",
+			"addPath": "Add Path\nCreates a new default path and adds it to this glyph.",
+			"addPathTure": "Add Component Instance\nChoose another Component or Glyph, and use it as a Component Instance in this glyph.",
+			"pastePathsFromAnotherGlyph": "Get Paths\nChoose another Glyph, and copy all the paths from that glyph to this one.",
+			"pastePathsFromAnotherProject": "Get Paths From Another Project\nChoose another Glyph from the other open project, and copy all the paths from that glyph to this one.",
+			"flipHorizontal": "Flip Vertical\nReflects the glyph vertically.",
+			"flipVertical": "Flip Horizontal\nReflects the glyph horizontally.",
+			"round": "Round all path point and handle position values\nIf a x or y value for any point or a handle in the path has decimals, it will be rounded to the nearest whole number.",
+			"combine_unite": "Combine all paths: Unite\nMerges all paths in this glyph into as few paths as possible.",
+			"deleteGlyph": "Delete Glyph\nRemove this Glyph from the project. \nDon't worry, you can undo this action.",
+			"exportGlyphSVG": "Export glyph SVG File\nGenerate a SVG file that only includes the SVG outline for this glyph. This file can be dragged and dropped directly to another Glyphr Studio project edit canvas, allowing for copying glyph paths between projects.",
+			"importGlyphSVG": "Import paths from a SVG File\nUsing the file picker dialog, select a SVG file. Outlines will be imported and added to this glyph.\nYou can also just drag and drop a SVG file onto the edit canvas to import it.",
+			"deletePath": "Delete\nRemoves the currently selected shape(s) from this glyph.",
+			"switchPathComponent": "Turn Path into a Component Instance\nTakes the selected path and creates a Component out of it,\nthen links that Component to this glyph as a Component Instance.",
+			"pathFlipHorizontal": "Flip Horizontal\nReflects the currently selected shape(s) horizontally.",
+			"pathFlipVertical": "Flip Vertical\nReflects the currently selected shape(s) vertically",
+			"moveLayerUp": "Move Path Up\nMoves the path up in the path layer order.",
+			"moveLayerDown": "Move Path Down\nMoves the path down in the path layer order.",
+			"pasteTooltip1": "Paste\nAdds the previously-copied shape(s) into this glyph.\n\n",
+			"pasteTooltip2": "Currently ",
+			"pasteTooltip3": " Path",
+			"pasteTooltip4": " on the clipboard.",
+			"clearTooltip1": "Clear Glyphr Studio Clipboard\n",
+			"clearTooltip2": "In order to use your Operating System clipboard for copy / paste, the Glyphr Studio clipboard must be empty.\n\n",
+			"clearTooltip3": "Currently ",
+			"clearTooltip4": " Path",
+			"clearTooltip5": " on the clipboard."
+		}
+	},
+	"objType": {
+		"Glyph": "Glyph",
+		"Path": "Path",
+		"BulkEditPaths": "Bulk-edit paths",
+		"OverallPaths": "Overall paths"
+	},
+	"bulkEditPaths": {
+		"transformOrigin": "transform origin",
+		"transformOriginTips": "With increases or decreases to width or height, the transform origin is the point that stays fixed.<br><br>This only takes effect when directly entering values into the width or height inputs.",
+		"lockAspectRatio": "lock aspect ratio",
+		"lockAspectRatioTips": "When either the width or height is adjusted, the overall size will be kept proportional.<br><br>Maintaining aspect ratio will override value locks if need be."
+	},
+	"path": {
+		"pathName": "path name",
+		"winding": "winding",
+		"winding2": "Winding",
+		"windingTips1": "Ordered Path Points that make up a path outline have either a clockwise or counter-clockwise direction. This path direction is also known as a path&rsquo;s &ldquo;winding&rdquo;. Paths with the same winding will visually combine, opposite windings will cut-out.",
+		"windingTips2": "For example, to create the glyph &lsquo;o&rsquo;, draw two overlapping oval paths. If the outside oval has a clockwise winding, select the inside oval and change it&rsquo;s winding to counter-clockwise. This will result in the inside oval appearing transparent (or cutting out) in relation to the outside oval.",
+		"windingTips3": "Same Winding",
+		"windingTips4": "Different Winding",
+		"windingTips5": "Paths with the same winding will visually combine",
+		"windingTips6": "Paths with different windings will appear transparent where they overlap",
+		"clockwise": "Clockwise",
+		"counterClockwise": "Counter-clockwise",
+		"pathPoint": "Path point",
+		"point": "point",
+		"pointType": "point type",
+		"symmetric": "symmetric",
+		"flat": "flat",
+		"corner": "corner",
+		"useHandle": "Use handle"
 	}
 }

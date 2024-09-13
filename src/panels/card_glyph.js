@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { addAsChildren, makeElement, textToNode } from '../common/dom.js';
 import { makeIcon } from '../common/graphics.js';
@@ -20,22 +21,20 @@ import {
 export function makeCard_glyphAttributes(glyph) {
 	// log(`makeCard_glyphAttributes`, 'start');
 	// log(`glyph.id: ${glyph.id}`);
-
 	// `ident` is a unique ID per object for debugging
 	let glyphCard = makeElement({
 		tag: 'div',
 		className: 'panel__card',
-		innerHTML: `<h3>${glyph.displayType} ${glyph.ident || ''}</h3>`,
+		innerHTML: `<h3>${t(`ui:objType.${glyph.displayType}`)} ${glyph.ident || ''}</h3>`,
 	});
 
-	let advanceWidthLabel = makeSingleLabel('advance width');
+	let advanceWidthLabel = makeSingleLabel(t('ui:glyph.advanceWidth'));
 	let halfSizeAdvanceWidthInput = makeElement({ tag: 'div', className: 'doubleInput' });
 	let advanceWidthInput = makeSingleInput(glyph, 'advanceWidth', 'currentItem', 'input-number');
 	let autoFitAdvanceWidth = makeElement({
 		tag: 'button',
 		className: 'panel-card__action-button',
-		title:
-			'Auto-fit advance width\nThe advance width will be set to the x-max of the paths in this glyph.',
+		title: t('ui:glyph.autoAdvanceWidth'),
 		innerHTML: makeIcon({ name: 'command_autoFit' }),
 		onClick: () => {
 			let editor = getCurrentProjectEditor();
@@ -50,25 +49,18 @@ export function makeCard_glyphAttributes(glyph) {
 		tag: 'label',
 		className: 'info',
 		innerHTML: `
-			<span>bearings: left${dimSplit()}right</span>
+			<span>${t('ui:glyph.bearingsLeft')}${dimSplit()}${t('ui:glyph.bearingsRight')}</span>
 			<info-bubble>
-				<h1>Side Bearings</h1>
-				Side bearings are the blank space to the left and right
-				of shapes in a glyph. The open space between
-				characters is very important for legibility.
+				<h1>${t('ui:glyph.sideBearings')}</h1>
+				${t('ui:glyph.sideBearingsTips')}
 				<br><br>
-				These are calculated values based on shape positions and the
-				Advance Width. They are not properties that are saved with the
-				glyph, but it's helpful to think about them as if they were.
+				${t('ui:glyph.sideBearingsTips2')}
 				<br>
-				<h2>Left side bearing</h2>
-				Distance from x=0 to the leftmost side of shapes in the glyph.
-				Editing this will move all the shapes in the glyph, and update
-				the Advance Width.
+				<h2>${t('ui:glyph.leftSideBearing')}</h2>
+				${t('ui:glyph.leftSideBearingTips')}
 				<br>
-				<h2>Right side bearing</h2>
-				Distance from the rightmost side of shapes in the glyph to the
-				Advance Width.
+				<h2>${t('ui:glyph.rightSideBearing')}</h2>
+				${t('ui:glyph.rightSideBearingTips')}
 			</info-bubble>
 		`,
 	});
@@ -96,7 +88,10 @@ export function makeCard_glyphAttributes(glyph) {
 		addAsChildren(glyphCard, rowPad());
 		addAsChildren(
 			glyphCard,
-			makeElement({ tag: 'h4', content: showAsDisabled ? 'Overall paths' : 'Bulk-edit paths' })
+			makeElement({
+				tag: 'h4',
+				content: showAsDisabled ? t('ui:objType.OverallPaths') : t('ui:objType.BulkEditPaths'),
+			})
 		);
 		addAsChildren(glyphCard, makeInputs_position(glyph, '', [], showAsDisabled));
 		addAsChildren(glyphCard, makeInputs_size(glyph, showAsDisabled));

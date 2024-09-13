@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProjectEditor } from '../../app/main.js';
 import { accentColors } from '../../common/colors.js';
 import { addAsChildren, makeElement } from '../../common/dom.js';
@@ -37,12 +38,12 @@ export function makeEditToolsButtons() {
 
 	// Button data
 	let toolButtonData = {
-		newRectangle: { title: 'New rectangle', disabled: false },
-		newOval: { title: 'New oval', disabled: false },
-		newPath: { title: 'New path', disabled: false },
-		pathAddPoint: { title: 'Add path point', disabled: false },
-		pathEdit: { title: 'Path edit', disabled: false },
-		resize: { title: 'Resize', disabled: false },
+		newRectangle: { title: t('ui:character.option.newRectangle'), disabled: false },
+		newOval: { title: t('ui:character.option.newOval'), disabled: false },
+		newPath: { title: t('ui:character.option.newPath'), disabled: false },
+		pathAddPoint: { title: t('ui:character.option.pathAddPoint'), disabled: false },
+		pathEdit: { title: t('ui:character.option.pathEdit'), disabled: false },
+		resize: { title: t('ui:character.option.resize'), disabled: false },
 	};
 
 	// Disable pen and add path point buttons for certain conditions

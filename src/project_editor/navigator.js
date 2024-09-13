@@ -27,6 +27,7 @@ export class Navigator {
 	constructor() {
 		this.page = 'Overview';
 		this.panel = 'Attributes';
+		this.panelI18n = t('ui:Attributes');
 		this.pageContents = {};
 	}
 
@@ -212,7 +213,7 @@ export function makeNavButton(properties = {}) {
 			id="nav-button${level ? `-${level}` : ''}"
 			title="${title}"
 		>
-			${makeNavButtonContent(properties.label || title, properties.subLabel || superTitle)}
+			${makeNavButtonContent(properties.titleI18n || title, properties.superTitleI18n || superTitle)}
 		</button>
 	`;
 }
@@ -378,7 +379,10 @@ function makeNavButton_Page(pageName, iconName, item) {
 			editor.multiSelect.points.clear();
 		}
 		editor.nav.page = pageName;
-		if (pageName === 'Kerning') editor.nav.panel = 'Attributes';
+		if (pageName === 'Kerning') {
+			editor.nav.panel = 'Attributes';
+			editor.nav.panelI18n = t('ui:Attributes');
+		}
 		editor.navigate();
 		if (editor.selectedItemID) {
 			let lastChange = editor.history.queue[0] || false;
@@ -433,12 +437,13 @@ function makeNavButton_Panel(panelName, iconName, panel) {
 		attributes: { tabindex: '0' },
 	});
 	button.innerHTML += makeIcon({ name: iconName, color: accentColors.blue.l90 });
-	button.appendChild(makeElement({ content: panel.label || panelName }));
+	button.appendChild(makeElement({ content: panel.nameI18n || panelName }));
 	button.addEventListener('click', () => {
 		// log(`navButton.click`, 'start');
 		// log(`panelName: ${panelName}`);
 		const editor = getCurrentProjectEditor();
 		editor.nav.panel = panelName;
+		editor.nav.panelI18n = panel.nameI18n;
 		editor.showPageTransitions = false;
 		editor.navigate();
 		editor.showPageTransitions = true;
@@ -454,33 +459,33 @@ function listOfPanels() {
 	return {
 		Attributes: {
 			name: 'Attributes',
+			nameI18n: t('ui:Attributes'),
 			panelMaker: false,
 			iconName: 'panel_attributes',
-			label: t('ui:Attributes'),
 		},
 		Layers: {
 			name: 'Layers',
+			nameI18n: t('ui:Layers'),
 			panelMaker: false,
 			iconName: 'panel_layers',
-			label: t('ui:Layers'),
 		},
 		ContextCharacters: {
 			name: 'Context characters',
+			nameI18n: t('ui:ContextCharacters'),
 			panelMaker: false,
 			iconName: 'panel_contextCharacters',
-			label: t('ui:ContextCharacters'),
 		},
 		History: {
 			name: 'History',
+			nameI18n: t('ui:History'),
 			panelMaker: false,
 			iconName: 'panel_history',
-			label: t('ui:History'),
 		},
 		Guides: {
 			name: 'Guides',
+			nameI18n: t('ui:Guides'),
 			panelMaker: false,
 			iconName: 'panel_guides',
-			label: t('ui:Guides'),
 		},
 	};
 }

@@ -112,6 +112,8 @@
 	"Number": "数字",
 	"Degree": "度",
 	"Boolean": "布尔",
+	"width": "宽度",
+	"height": "高度",
 	"font": {
 		"FontFamilyDescription": "基础的字体名称，将在字体样式之间共享。这也将用作导出字体文件的基础名称。",
 		"FontStyle": "字体样式",
@@ -185,17 +187,6 @@
 		"overlineThickness": "上划线厚度",
 		"overlineThicknessDescription": "上划线的理想高度。"
 	},
-	"paging": {
-		"total": "总计：",
-		"page": "页",
-		"current": "当前：第",
-		"prev": "上一页",
-		"noPrev": "没有上一页了",
-		"next": "下一页",
-		"noNext": "没有下一页了",
-		"jumpText": "跳转到指定页",
-		"invalid": "无效页码"
-	},
 	"app": {
 		"preferences": "应用偏好设置",
 		"tips": "这些设置用于调整 Glyphr Studio 应用的行为。",
@@ -232,5 +223,91 @@
 		"exportUneditedItemsDescription": "当你创建连字或组件，或导航到某个字符时，会为你创建一个空的字形项。你可以将这些项目保持未编辑状态，实际上是空的。<br><br> 如果选中此选项，这些空项将被导出到字体中。如果未选中此选项，这些空项将被过滤掉，不会导出到字体中。<br><br> 在项目选择器中，这些空项的名称将显示为绿色。<br><br>如果选中此选项，这些空项目将导出到字体。如果取消选中，此类空项目将被过滤掉，不会导出到字体。<br><br>在字形选择器中，这些空项目的名称将以绿色显示。",
 		"moveShapesOnSVGDragDrop": "拖放 SVG 文件时移动形状",
 		"moveShapesOnSVGDragDropDescription": "通过将 .svg 文件拖放到画布上导入 SVG 时，将导入的形状移动到原点 (x = 0, y = 形状高度)。"
+	},
+	"glyph": {
+		"advanceWidth": "前进宽度",
+		"autoAdvanceWidth": "自动适配前进宽度\n前进宽度将设置为该字形中路径的最大x值。",
+		"bearingsLeft": "边距：左",
+		"bearingsRight": "右",
+		"sideBearings": "侧边距",
+		"sideBearingsTips": "侧边距是字形中形状左侧和右侧的空白空间。<br/>字符之间的空白对可读性非常重要。",
+		"sideBearingsTips2": "这些是基于形状位置和前进宽度的计算值，它们并不是随字形保存的属性，但将它们视为属性是有帮助的。",
+		"leftSideBearing": "左侧边距",
+		"leftSideBearingTips": "从 x=0 到字形中最左侧的形状之间的距离。编辑此项将移动字形中的所有形状，并更新前进宽度。",
+		"rightSideBearing": "右侧边距",
+		"rightSideBearingTips": "从字形中最右侧的形状到前进宽度之间的距离。"
+	},
+	"character": {
+		"option": {
+			"newRectangle": "新建矩形",
+			"newOval": "新建椭圆",
+			"newPath": "新建路径",
+			"pathAddPoint": "添加路径点",
+			"pathEdit": "编辑路径",
+			"resize": "调整大小"
+		},
+		"action": {
+			"copy": "复制\n将选中的形状添加到剪贴板。",
+			"undo": "撤销\n回退一步操作。",
+			"linkToGlyph": "链接到字形\n选择一个字形，并将该组件作为组件实例添加到该字形中。",
+			"addPath": "添加路径\n创建一个默认路径并将其添加到此字形中。",
+			"addPathTure": "添加组件实例\n选择另一个组件或字形，并将其作为组件实例使用。",
+			"pastePathsFromAnotherGlyph": "获取路径\n选择另一个字形，并将该字形的所有路径复制到此字形中。",
+			"pastePathsFromAnotherProject": "从另一个项目获取路径\n选择另一个打开项目中的字形，并将该字形的所有路径复制到此字形中。",
+			"flipHorizontal": "垂直翻转\n垂直反射字形。",
+			"flipVertical": "水平翻转\n水平反射字形。",
+			"round": "将所有路径点和控制柄的位置值取整\n如果路径中任何点或控制柄的 x 或 y 值有小数，则将其四舍五入为最接近的整数。",
+			"combine_unite": "合并所有路径：联合\n将此字形中的所有路径合并为尽可能少的路径。",
+			"deleteGlyph": "删除字形\n从项目中移除此字形。\n别担心，可以撤销此操作。",
+			"exportGlyphSVG": "导出字形 SVG 文件\n生成仅包含此字形轮廓的 SVG 文件。该文件可以直接拖放到另一个 Glyphr Studio 项目编辑画布上，从而在项目之间复制字形路径。",
+			"importGlyphSVG": "从 SVG 文件导入路径\n使用文件选择对话框选择一个 SVG 文件。轮廓将被导入并添加到此字形中。\n您也可以直接将 SVG 文件拖放到编辑画布上以导入。",
+			"deletePath": "删除\n从此字形中移除当前选中的形状。",
+			"switchPathComponent": "将路径转换为组件实例\n将选定的路径创建为一个组件，然后将该组件链接到此字形中作为组件实例。",
+			"pathFlipHorizontal": "水平翻转\n水平反射当前选中的形状。",
+			"pathFlipVertical": "垂直翻转\n垂直反射当前选中的形状。",
+			"moveLayerUp": "向上移动路径\n在路径图层顺序中向上移动路径。",
+			"moveLayerDown": "向下移动路径\n在路径图层顺序中向下移动路径。",
+			"pasteTooltip1": "粘贴\n将之前复制的形状添加到此字形中。\n\n",
+			"pasteTooltip2": "当前剪贴板上有",
+			"pasteTooltip3": "",
+			"pasteTooltip4": "个路径。",
+			"clearTooltip1": "清空 Glyphr Studio 剪贴板\n",
+			"clearTooltip2": "要使用操作系统的剪贴板进行复制/粘贴，必须先清空 Glyphr Studio 剪贴板。\n\n",
+			"clearTooltip3": "当前剪贴板上有",
+			"clearTooltip4": "",
+			"clearTooltip5": "个路径。"
+		}
+	},
+	"objType": {
+		"Glyph": "字型",
+		"Path": "路径",
+		"BulkEditPaths": "批量编辑路径",
+		"OverallPaths": "整体路径"
+	},
+	"bulkEditPaths": {
+		"transformOrigin": "变换原点",
+		"transformOriginTips": "当宽度或高度增加或减少时，变换原点是保持固定的点。<br><br>此设置仅在直接输入宽度或高度时生效。",
+		"lockAspectRatio": "锁定宽高比",
+		"lockAspectRatioTips": "调整宽度或高度时，整体大小将保持成比例。<br><br>保持宽高比时，如有必要，将覆盖锁定值。"
+	},
+	"path": {
+		"pathName": "路径名称",
+		"winding": "路径方向",
+		"winding2": "路径方向",
+		"windingTips1": "构成路径轮廓的有序路径点具有顺时针或逆时针方向。这种路径方向也称为路径的“方向”。具有相同路径方向的路径将视觉上合并，相反的方向将表现为切割。",
+		"windingTips2": "例如，要创建字形'o'，绘制两个重叠的椭圆路径。如果外椭圆是顺时针方向，选择内椭圆并将其方向改为逆时针。这会导致内椭圆在外椭圆内显示为透明（或切割效果）。",
+		"windingTips3": "相同路径方向",
+		"windingTips4": "不同路径方向",
+		"windingTips5": "具有相同路径方向的路径将视觉上合并",
+		"windingTips6": "具有不同路径方向的路径在重叠处将显示为透明",
+		"clockwise": "顺时针",
+		"counterClockwise": "逆时针",
+		"pathPoint": "路径点",
+		"point": "点",
+		"pointType": "点类型",
+		"symmetric": "对称",
+		"flat": "直线",
+		"corner": "曲线",
+		"useHandle": "启用控制柄"
 	}
 }
