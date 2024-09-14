@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { addAsChildren, makeElement } from '../common/dom.js';
 import { eventHandlerData } from '../edit_canvas/events.js';
@@ -96,7 +97,7 @@ export function makePanel_Layers() {
 				})
 			);
 
-			let subtitle = 'Path';
+			let subtitle = t('ui:objType.Path');
 			if (item.link) subtitle = `Component instance&emsp;|&emsp;${project.getItem(item.link).name}`;
 			row.appendChild(
 				makeElement({
@@ -110,7 +111,7 @@ export function makePanel_Layers() {
 	} else {
 		rowsArea.appendChild(
 			makeElement({
-				content: `No paths exist yet.  You can create one with the New Path tools on the canvas, or by pressing "add new path" below.`,
+				content: `${t('ui:path.noPath')}`,
 			})
 		);
 	}
@@ -139,7 +140,7 @@ function makeActionArea_Layers() {
 
 	let actionsCard = makeElement({
 		className: 'panel__card full-width',
-		content: '<h3>Actions</h3>',
+		content: `<h3>${t('ui:Actions')}</h3>`,
 	});
 
 	let actionsArea = makeElement({

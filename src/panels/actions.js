@@ -593,7 +593,7 @@ export function getActionData(name) {
 		actionData = [
 			{
 				iconName: 'insertPathPoint',
-				title: `Insert Path Point\nAdds a new Path Point half way between the currently-selected point, and the next one.`,
+				title: t('ui:character.action.insertPathPoint'),
 				disabled: selectedPoints.length !== 1,
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
@@ -607,13 +607,13 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'deletePathPoint',
-				title: `Delete Path Point\nRemoves the currently selected point or points from the path.`,
+				title: t('ui:character.action.deletePathPoint'),
 				disabled: selectedPaths.length === 0,
 				onClick: deleteSelectedPoints,
 			},
 			{
 				iconName: 'resetPathPoint',
-				title: `Reset Handles\nMoves the handles of the currently selected point or points to default locations.`,
+				title: t('ui:character.action.resetPathPoint'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					editor.multiSelect.points.resetHandles();
@@ -625,7 +625,7 @@ export function getActionData(name) {
 			},
 			{
 				iconName: 'round',
-				title: `Round path point and handle position values\nIf a x or y value for the point or a handle has decimals, it will be rounded to the nearest whole number.`,
+				title: t('ui:character.action.pointRound'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					editor.multiSelect.points.roundAll(0);
@@ -640,7 +640,7 @@ export function getActionData(name) {
 			{
 				iconName: 'selectPreviousPathPoint',
 				disabled: editor.multiSelect.points.hasMultipleParents,
-				title: `Select pervious Path Point\nSelect the path point that comes before the currently selected path point.\nHold [Ctrl] to add the previous path point to the selection.`,
+				title: t('ui:character.action.selectPreviousPathPoint'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let msPoints = editor.multiSelect.points;
@@ -660,7 +660,7 @@ export function getActionData(name) {
 			{
 				iconName: 'selectNextPathPoint',
 				disabled: editor.multiSelect.points.hasMultipleParents,
-				title: `Select next Path Point\nSelect the path point that comes after the currently selected path point.\nHold [Ctrl] to add the next path point to the selection.`,
+				title: t('ui:character.action.selectNextPathPoint'),
 				onClick: () => {
 					const editor = getCurrentProjectEditor();
 					let msPoints = editor.multiSelect.points;

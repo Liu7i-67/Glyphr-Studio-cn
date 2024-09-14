@@ -164,10 +164,12 @@ export function makeCard_glyphNavigation(item) {
 		tag: 'fancy-button',
 		className: 'thumbnail-button button-left',
 		attributes: { minimal: '' },
-		title: `Navigate to:\n${previousItemName}\n${previousItem.id}`,
+		title: `${t('ui:navigateTo')}:\n${previousItemName}\n${previousItem.id}`,
 	});
 	previousButton.innerHTML =
-		project.makeItemThumbnail(previousItem, 24) + '<span>Previous&nbsp;item</span>';
+		project.makeItemThumbnail(previousItem, 24) +
+		`<span>${t('ui:prevItem')}</span>` +
+		`<span>(&#${previousItem.id.split('-0')[1]};)</span>`;
 	previousButton.addEventListener('click', () => {
 		editor.selectedItemID = previousItem.id;
 		editor.history.addState(`Navigated to ${previousItemName}`);
@@ -180,9 +182,12 @@ export function makeCard_glyphNavigation(item) {
 		tag: 'fancy-button',
 		className: 'thumbnail-button button-right',
 		attributes: { minimal: '' },
-		title: `Navigate to:\n${nextItemName}\n${nextItem.id}`,
+		title: `${t('ui:navigateTo')}:\n${nextItemName}\n${nextItem.id}`,
 	});
-	nextButton.innerHTML = '<span>Next&nbsp;item</span>' + project.makeItemThumbnail(nextItem, 24);
+	nextButton.innerHTML =
+		`<span>(&#${nextItem.id.split('-0')[1]};)</span>` +
+		`<span>${t('ui:nextItem')}</span>` +
+		project.makeItemThumbnail(nextItem, 24);
 	nextButton.addEventListener('click', () => {
 		editor.selectedItemID = nextItem.id;
 		editor.history.addState(`Navigated to ${nextItemName}`);

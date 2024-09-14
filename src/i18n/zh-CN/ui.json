@@ -114,6 +114,9 @@
 	"Boolean": "布尔",
 	"width": "宽度",
 	"height": "高度",
+	"prevItem": "上一个",
+	"nextItem": "下一个",
+	"navigateTo": "导航至",
 	"font": {
 		"FontFamilyDescription": "基础的字体名称，将在字体样式之间共享。这也将用作导出字体文件的基础名称。",
 		"FontStyle": "字体样式",
@@ -275,7 +278,13 @@
 			"clearTooltip2": "要使用操作系统的剪贴板进行复制/粘贴，必须先清空 Glyphr Studio 剪贴板。\n\n",
 			"clearTooltip3": "当前剪贴板上有",
 			"clearTooltip4": "",
-			"clearTooltip5": "个路径。"
+			"clearTooltip5": "个路径。",
+			"insertPathPoint": "插入路径点\n在当前选择的点和下一个点之间添加一个新的路径点。",
+			"deletePathPoint": "删除路径点\n从路径中移除当前选择的点或多个点。",
+			"resetPathPoint": "重置句柄\n将当前选择的点或多个点的句柄移动到默认位置。",
+			"pointRound": "路径点和句柄的位置信息取整\n如果点或句柄的x或y值有小数，将其四舍五入到最接近的整数。",
+			"selectPreviousPathPoint": "选择上一个路径点\n选择当前路径点之前的路径点。\n按住[Ctrl]键可将上一个路径点添加到选中。",
+			"selectNextPathPoint": "选择下一个路径点\n选择当前路径点之后的路径点。\n按住[Ctrl]键可将下一个路径点添加到选中。"
 		}
 	},
 	"objType": {
@@ -308,6 +317,17 @@
 		"symmetric": "对称",
 		"flat": "直线",
 		"corner": "曲线",
-		"useHandle": "启用控制柄"
+		"useHandle": "启用控制柄",
+		"noPath": "尚未存在路径。您可以在画布上使用“新建路径”工具创建一个，或者点击下方的“添加新路径”按钮。"
+	},
+	"context_characters": {
+		"charactersTips": "上下文字符是一组显示在您当前正在编辑的字符周围的字母。",
+		"showContextCharacters": "显示&nbsp;上下文&nbsp;字符&nbsp;&nbsp;",
+		"Transparency": "透明度",
+		"guideLabels": "参考线和标签",
+		"showGuideLabels": "显示参考线和标签",
+		"livePreview": "弹出实时预览",
+		"livePreviewTips": "全屏实时预览可以在新窗口中启动，对于预览整段或整句文字的字体效果非常有用。",
+		"livePreviewBtn": "在新窗口打开实时预览"
 	}
 }

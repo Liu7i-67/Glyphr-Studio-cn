@@ -114,6 +114,9 @@
 	"Boolean": "Boolean",
 	"width": "width",
 	"height": "height",
+	"prevItem": "Previous&nbsp;item",
+	"nextItem": "Next&nbsp;item",
+	"navigateTo": "Navigate to",
 	"font": {
 		"FontFamilyDescription": "Base font family name, that will be shared across font styles. This will also be used as the base name for exported font files.",
 		"FontStyle": "Font style",
@@ -275,7 +278,13 @@
 			"clearTooltip2": "In order to use your Operating System clipboard for copy / paste, the Glyphr Studio clipboard must be empty.\n\n",
 			"clearTooltip3": "Currently ",
 			"clearTooltip4": " Path",
-			"clearTooltip5": " on the clipboard."
+			"clearTooltip5": " on the clipboard.",
+			"insertPathPoint": "Insert Path Point\nAdds a new Path Point half way between the currently-selected point, and the next one.",
+			"deletePathPoint": "Delete Path Point\nRemoves the currently selected point or points from the path.",
+			"resetPathPoint": "Reset Handles\nMoves the handles of the currently selected point or points to default locations.",
+			"pointRound": "Round path point and handle position values\nIf a x or y value for the point or a handle has decimals, it will be rounded to the nearest whole number.",
+			"selectPreviousPathPoint": "Select pervious Path Point\nSelect the path point that comes before the currently selected path point.\nHold [Ctrl] to add the previous path point to the selection.",
+			"selectNextPathPoint": "Select next Path Point\nSelect the path point that comes after the currently selected path point.\nHold [Ctrl] to add the next path point to the selection."
 		}
 	},
 	"objType": {
@@ -308,6 +317,17 @@
 		"symmetric": "symmetric",
 		"flat": "flat",
 		"corner": "corner",
-		"useHandle": "Use handle"
+		"useHandle": "Use handle",
+		"noPath": "No paths exist yet.  You can create one with the New Path tools on the canvas, or by pressing 'add new path' below."
+	},
+	"context_characters": {
+		"charactersTips": "Context characters are a small set of letters that are shown around the character you are currently editing.",
+		"showContextCharacters": "Show&nbsp;context&nbsp;characters&nbsp;&nbsp;",
+		"Transparency": "Transparency",
+		"guideLabels": "Guides and labels",
+		"showGuideLabels": "Show guides and labels",
+		"livePreview": "Pop out live preview",
+		"livePreviewTips": "A full-screen live preview can be launched in a new window, useful for sentence or paragraph scale previews of your typeface.",
+		"livePreviewBtn": "Launch live preview in a new window"
 	}
 }

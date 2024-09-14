@@ -23,7 +23,13 @@ export function makePage_Settings() {
 		<div class="content__page">
 			<div class="content-page__left-area">
 				<div class="content-page__nav-area">
-					${makeNavButton({ level: 'l1', superTitle: 'PAGE', title: 'Settings' })}
+					${makeNavButton({
+						level: 'l1',
+						superTitle: 'PAGE',
+						superTitleI18n: t('ui:PAGE'),
+						title: 'Settings',
+						titleI18n: t('ui:Settings'),
+					})}
 				</div>
 				<div id="content-page__panel">
 				</div>

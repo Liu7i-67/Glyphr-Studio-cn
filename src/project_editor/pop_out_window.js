@@ -12,6 +12,7 @@ import { makeToolButtonSVG } from '../edit_canvas/tools/tools';
 import { makePanel_LivePreview } from '../panels/live_preview';
 import panelStyle from '../panels/panels.css?inline';
 import popOutWindowStyle from './pop-out-window.css?inline';
+import { t } from 'i18next';
 
 export function openPopOutWindow() {
 	// log(`openPopOutWindow`, 'start');
@@ -168,17 +169,15 @@ export function makeLivePreviewPopOutCard(showBlurb = false) {
 	const card = makeElement({
 		tag: 'div',
 		className: 'panel__card full-width',
-		innerHTML: '<h3>Pop out live preview</h3>',
+		innerHTML: `<h3>${t('ui:context_characters.livePreview')}</h3>`,
 	});
 	if (showBlurb) {
-		card.innerHTML += `
-			A full-screen live preview can be launched in a new window,
-			useful for sentence or paragraph scale previews of your typeface.`;
+		card.innerHTML += `${t('ui:context_characters.livePreviewTips')}`;
 	}
 	const button = makeElement({
 		tag: 'fancy-button',
 		attributes: { secondary: '' },
-		content: 'Launch live preview in a new window',
+		content: `${t('ui:context_characters.livePreviewBtn')}`,
 	});
 	// button.innerHTML += makeToolButtonSVG({ name: 'openLivePreview' });
 	button.addEventListener('click', openPopOutWindow);
