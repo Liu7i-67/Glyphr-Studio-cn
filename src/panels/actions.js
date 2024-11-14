@@ -26,6 +26,7 @@ import {
 	addLinkToUsedIn,
 	canAddComponentInstance,
 	makeGlyphSVGforExport,
+	makeGlyphWithResolvedLinks,
 	removeLinkFromUsedIn,
 } from '../project_editor/cross_item_actions.js';
 import { saveTextFile } from '../project_editor/file_io.js';
@@ -379,12 +380,19 @@ export function getActionData(name) {
 					editor.multiSelect.shapes.members.forEach((shape) => {
 						if (shape.objType === 'ComponentInstance') {
 							const sourceItem = editor.project.getItem(shape.link);
+							// log(`\n⮟sourceItem⮟`);
+							// log(sourceItem);
+							const transformedGlyph = shape.transformedGlyph;
+							// log(`\n⮟transformedGlyph⮟`);
+							// log(transformedGlyph);
 							newShapes = newShapes.concat(
-								copyShapesFromTo(shape.transformedGlyph, editor.selectedItem)
+								copyShapesFromTo(transformedGlyph, editor.selectedItem)
 							);
 							if (editor.selectedItemID) removeLinkFromUsedIn(sourceItem, editor.selectedItemID);
 						}
 					});
+					// log(`\n⮟editor.selectedItem⮟`);
+					// log(editor.selectedItem);
 					editor.multiSelect.shapes.deleteShapes();
 					newShapes.forEach((shape) => editor.multiSelect.shapes.add(shape));
 					editor.history.addWholeProjectChangePostState();
@@ -940,7 +948,7 @@ export function clipboardPaste() {
 		clipboard.dy -= 20;
 	}
 
-	if (clipboard && clipboard.shapes.length) {
+	if (clipboard && clipboard?.shapes?.length) {
 		let newShapes = [];
 
 		let newShape, newName, newSuffix, caret, suffix;
@@ -1007,7 +1015,9 @@ export function clipboardPaste() {
 				: `Pasted ${len} Paths<br>from the Glyphr Studio clipboard`
 		);
 		editor.publish('currentItem', editor.selectedItem);
+		return true;
 	}
+	return false;
 	// log('clipboardPaste', 'end');
 }
 
@@ -1051,16 +1061,17 @@ export function makeActionButtonClearClipboardTooltip(clipBoardPathCount) {
 	return re;
 }
 
-function showDialogChooseOtherItem(type) {
+function showDialogChooseOtherItem(actionName = '') {
 	// log(`showDialogChooseOtherItem`, 'start');
-	// log(`type: ${type}`);
-
-	let content = makeElement({
-		innerHTML: `<h2>Choose another glyph</h2>`,
-	});
+	// log(`actionName: ${actionName}`);
+	let content;
 	let onClick;
+	let itemChooserType = 'Characters';
 
-	if (type === 'copyPaths') {
+	if (actionName === 'copyPaths') {
+		content = makeElement({
+			innerHTML: `<h2>Copy paths from another glyph</h2>`,
+		});
 		content.innerHTML += `All the paths from the glyph you select will be copied and pasted into this glyph.<br><br>`;
 		addCopyActionsForChooseOtherItem(content);
 		onClick = (itemID) => {
@@ -1086,8 +1097,12 @@ function showDialogChooseOtherItem(type) {
 		};
 	}
 
-	if (type === 'addAsComponentInstance') {
+	if (actionName === 'addAsComponentInstance') {
 		// log(`Dialog addAsComponentInstance`, 'start');
+		itemChooserType = 'Components';
+		content = makeElement({
+			innerHTML: `<h2>Add another glyph as a component instance</h2>`,
+		});
 		content.innerHTML += `The glyph you select will be treated as a root component, and added to this glyph as a component instance.<br><br>`;
 		addCopyActionsForChooseOtherItem(content);
 
@@ -1128,7 +1143,10 @@ function showDialogChooseOtherItem(type) {
 		// log(`Dialog addAsComponentInstance`, 'end');
 	}
 
-	if (type === 'linkAsComponent') {
+	if (actionName === 'linkAsComponent') {
+		content = makeElement({
+			innerHTML: `<h2>Link this component to another glyph</h2>`,
+		});
 		content.innerHTML += `This component will be linked to the glyph you select as a component instance.<br><br>`;
 		onClick = (itemID) => {
 			const editor = getCurrentProjectEditor();
@@ -1159,14 +1177,8 @@ function showDialogChooseOtherItem(type) {
 		};
 	}
 
-	const scrollArea = makeElement({
-		tag: 'div',
-		className: 'modal-dialog__glyph-chooser-scroll-area',
-	});
-
-	const chooserArea = makeAllItemTypeChooserContent(onClick, 'Characters');
-	scrollArea.appendChild(chooserArea);
-	content.appendChild(scrollArea);
+	const chooserArea = makeAllItemTypeChooserContent(onClick, itemChooserType);
+	content.appendChild(chooserArea);
 	showModalDialog(content);
 	// log(`showDialogChooseOtherItem`, 'end');
 }
@@ -1203,7 +1215,7 @@ function addCopyActionsForChooseOtherItem(parent) {
 function showDialogChooseItemFromOtherProject() {
 	let content = makeElement({
 		innerHTML: `
-			<h2>Choose a glyph from the other open project</h2>
+			<h2>Copy shapes from a glyph in the other open project</h2>
 			All the paths from the glyph you select will be copied and pasted into this glyph.
 			<br><br>
 			<strong style="display: inline-block; margin-bottom:10px;">Copy options:</strong>
@@ -1215,7 +1227,8 @@ function showDialogChooseItemFromOtherProject() {
 	addCrossProjectCopyShapeOptionControls(content, otherEditor, thisEditor);
 
 	let onClick = (itemID) => {
-		const otherItem = otherEditor.project.getItem(itemID);
+		const sourceItem = otherEditor.project.getItem(itemID);
+		const resolvedGlyph = makeGlyphWithResolvedLinks(sourceItem);
 		const thisItem = thisEditor.selectedItem;
 		const emRatio = thisEditor.project.settings.font.upm / otherEditor.project.settings.font.upm;
 		// log(`emRatio: ${emRatio}`);
@@ -1227,7 +1240,8 @@ function showDialogChooseItemFromOtherProject() {
 
 		/**@type {HTMLInputElement} */
 		const scaleItemsBox = document.querySelector('#checkbox-scale');
-		const scaleItems = scaleItemsBox.checked;
+		let scaleItems = false;
+		if (scaleItemsBox) scaleItems = scaleItemsBox?.checked;
 		// log(`scaleItems: ${scaleItems}`);
 
 		/**@type {HTMLInputElement} */
@@ -1236,13 +1250,13 @@ function showDialogChooseItemFromOtherProject() {
 		// log(`reverseWindings: ${reverseWindings}`);
 
 		const oldRSB = thisItem.rightSideBearing;
-		const newShapes = copyShapesFromTo(otherItem, thisItem, false);
+		const newShapes = copyShapesFromTo(resolvedGlyph, thisItem, false);
 		const msShapes = thisEditor.multiSelect.shapes;
 		msShapes.clear();
 		newShapes.forEach((shape) => msShapes.add(shape));
 
 		if (scaleItems) {
-			let deltaWidth = otherItem.advanceWidth * emRatio - otherItem.advanceWidth;
+			let deltaWidth = resolvedGlyph.advanceWidth * emRatio - resolvedGlyph.advanceWidth;
 			// log(`deltaWidth: ${deltaWidth}`);
 			msShapes.virtualGlyph.updateGlyphSize({
 				width: deltaWidth,
@@ -1256,26 +1270,19 @@ function showDialogChooseItemFromOtherProject() {
 
 		thisEditor.publish('currentItem', thisItem);
 		let title = `
-			${otherItem.shapes.length} paths were copied<br>
-			from ${otherEditor.project.settings.project.name} : ${otherItem.name}`;
+			${resolvedGlyph.shapes.length} paths were copied<br>
+			from ${otherEditor.project.settings.project.name} : ${resolvedGlyph.name}`;
 		thisEditor.history.addState(title);
 		closeEveryTypeOfDialog();
 		showToast(title);
 	};
 
-	const scrollArea = makeElement({
-		tag: 'div',
-		className: 'modal-dialog__glyph-chooser-scroll-area',
-	});
-
 	const chooserArea = makeAllItemTypeChooserContent(
 		onClick,
 		'Characters',
-		getGlyphrStudioApp().otherProjectEditor,
-		true
+		getGlyphrStudioApp().otherProjectEditor
 	);
-	scrollArea.appendChild(chooserArea);
-	content.appendChild(scrollArea);
+	content.appendChild(chooserArea);
 	showModalDialog(content);
 }
 

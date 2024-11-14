@@ -19,31 +19,29 @@ let savedRegisterSubscriptions;
 
 export function makeAllItemTypeChooserContent(
 	clickHandler,
-	type = '',
-	editor = getCurrentProjectEditor(),
-	isSecondaryProject = false
+	itemType = '',
+	editor = getCurrentProjectEditor()
 ) {
 	// log(`makeAllItemTypeChooserContent`, 'start');
-	// log(`\n⮟editor⮟`);
-	// log(editor);
+	// log(`Project Name: ${editor.project.settings.project.name}`);
 	savedClickHandler = clickHandler;
 	savedRegisterSubscriptions = true;
 
 	let wrapper = makeElement({ tag: 'div', className: 'item-chooser__wrapper' });
 	let header = makeElement({ tag: 'div', className: 'item-chooser__header' });
-	header.appendChild(makeRangeAndItemTypeChooser(editor));
+	header.appendChild(makeRangeAndItemTypeChooser(editor, itemType));
 	wrapper.appendChild(header);
 
-	let show = type || editor.nav.page;
-	if (show === 'Ligatures') {
+	let show = itemType || editor.nav.page;
+	if (show === 'Ligatures' && countItems(editor.project.ligatures) > 0) {
 		// Ligature Chooser
-		wrapper.appendChild(makeLigatureChooserTileGrid(editor, !isSecondaryProject));
-	} else if (show === 'Components') {
+		wrapper.appendChild(makeLigatureChooserTileGrid(editor));
+	} else if (show === 'Components' && countItems(editor.project.components) > 0) {
 		// Component Chooser
-		wrapper.appendChild(makeComponentChooserTileGrid(editor, !isSecondaryProject));
+		wrapper.appendChild(makeComponentChooserTileGrid(editor));
 	} else {
 		// Overview and Character = Character Chooser
-		wrapper.appendChild(makeCharacterChooserTileGrid(editor, !isSecondaryProject));
+		wrapper.appendChild(makeCharacterChooserTileGrid(editor));
 	}
 
 	// log(`makeAllItemTypeChooserContent`, 'end');
@@ -102,11 +100,29 @@ export function makeSingleItemTypeChooserContent(itemPageName, clickHandler) {
 	return wrapper;
 }
 
-export function makeRangeAndItemTypeChooser(editor = getCurrentProjectEditor()) {
+export function makeRangeAndItemTypeChooser(editor = getCurrentProjectEditor(), rangeName = '') {
 	// log(`makeRangeAndItemTypeChooser`, 'start');
+	// log(`Project Name: ${editor.project.settings.project.name}`);
 
-	let selectedRange = editor.selectedCharacterRange;
+	let componentCount = countItems(editor.project.components);
+	let ligatureCount = countItems(editor.project.ligatures);
+
+	let selectedRange;
+	if (rangeName === 'Components' && componentCount > 0) {
+		selectedRange = {
+			name: 'Components',
+			id: `Components ${componentCount}&nbsp;items`,
+		};
+	} else if (rangeName === 'Ligatures' && ligatureCount > 0) {
+		selectedRange = {
+			name: 'Ligatures',
+			id: `Ligatures ${ligatureCount}&nbsp;items`,
+		};
+	} else {
+		selectedRange = editor.selectedCharacterRange;
+	}
 	// log(selectedRange);
+
 	let optionChooser = makeElement({
 		tag: 'option-chooser',
 		attributes: {
@@ -115,9 +131,6 @@ export function makeRangeAndItemTypeChooser(editor = getCurrentProjectEditor()) 
 		},
 	});
 	let option;
-
-	let ligatureCount = countItems(editor.project.ligatures);
-	let componentCount = countItems(editor.project.components);
 
 	if (ligatureCount) {
 		// log(`range.name: Ligatures`);
@@ -132,7 +145,7 @@ export function makeRangeAndItemTypeChooser(editor = getCurrentProjectEditor()) 
 			let tileGrid = document.querySelector('.item-chooser__tile-grid');
 			tileGrid.remove();
 			let wrapper = document.querySelector('.item-chooser__wrapper');
-			wrapper.appendChild(makeLigatureChooserTileGrid());
+			wrapper.appendChild(makeLigatureChooserTileGrid(editor));
 		});
 
 		optionChooser.appendChild(option);
@@ -151,7 +164,7 @@ export function makeRangeAndItemTypeChooser(editor = getCurrentProjectEditor()) 
 			let tileGrid = document.querySelector('.item-chooser__tile-grid');
 			tileGrid.remove();
 			let wrapper = document.querySelector('.item-chooser__wrapper');
-			wrapper.appendChild(makeComponentChooserTileGrid());
+			wrapper.appendChild(makeComponentChooserTileGrid(editor));
 		});
 
 		optionChooser.appendChild(option);
@@ -182,8 +195,10 @@ function makeRangeChooser(editor = getCurrentProjectEditor()) {
 }
 
 function addRangeOptionsToOptionChooser(optionChooser, editor = getCurrentProjectEditor()) {
-	const project = getCurrentProject();
-	let ranges = project.settings.project.characterRanges;
+	// log(`addRangeOptionsToOptionChooser`, 'start');
+	// log(`Project Name: ${editor.project.settings.project.name}`);
+
+	let ranges = editor.project.settings.project.characterRanges;
 	let option;
 	ranges.forEach((range) => {
 		if (range.enabled) {
@@ -197,31 +212,32 @@ function addRangeOptionsToOptionChooser(optionChooser, editor = getCurrentProjec
 
 			option.addEventListener('click', () => {
 				// log(`OPTION.click - range: ${range.name}`);
-
 				editor.selectedCharacterRange = range;
+				editor.chooserPage.characters = 0;
 				let tileGrid = document.querySelector('.item-chooser__tile-grid');
 				// log(tileGrid);
 				tileGrid.remove();
 				let wrapper = document.querySelector('.item-chooser__wrapper');
 				// log(wrapper);
-				wrapper.appendChild(makeCharacterChooserTileGrid());
+				wrapper.appendChild(makeCharacterChooserTileGrid(editor));
 			});
 
 			optionChooser.appendChild(option);
 		}
 	});
+	// log(`addRangeOptionsToOptionChooser`, 'end');
 }
 
-function makeCharacterChooserTileGrid(editor = getCurrentProjectEditor(), showSelected = true) {
+function makeCharacterChooserTileGrid(editor = getCurrentProjectEditor()) {
 	// log(`makeCharacterChooserTileGrid`, 'start');
 	// console.time('makeCharacterChooserTileGrid');
+	// log(`Project Name: ${editor.project.settings.project.name}`);
 	// log(editor.project.settings.project.characterRanges);
 	// log(editor.selectedCharacterRange);
 
+	const isPrimaryProject = editor === getCurrentProjectEditor();
 	let tileGrid = makeElement({ tag: 'div', className: 'item-chooser__tile-grid' });
-	let rangeArray = editor.selectedCharacterRange.getMemberIDs(
-		editor.project.settings.app.showNonCharPoints
-	);
+	let rangeArray = editor.selectedCharacterRange.getMemberIDs();
 
 	if (rangeArray?.length) {
 		const pagedCharacters = getItemsFromPage(rangeArray, editor.chooserPage.characters, editor);
@@ -232,7 +248,7 @@ function makeCharacterChooserTileGrid(editor = getCurrentProjectEditor(), showSe
 			const glyphID = `glyph-${charID}`;
 			// log(`glyphID: ${glyphID}`);
 			let oneTile = new GlyphTile({ 'displayed-item-id': glyphID, project: editor.project });
-			if (showSelected && editor.selectedGlyphID === glyphID) {
+			if (isPrimaryProject && editor.selectedGlyphID === glyphID) {
 				oneTile.setAttribute('selected', '');
 			}
 
@@ -247,7 +263,7 @@ function makeCharacterChooserTileGrid(editor = getCurrentProjectEditor(), showSe
 						// log(`checking if ${newGlyphID} === ${glyphID}`);
 						if (parseInt(newGlyphID) === parseInt(glyphID)) {
 							// log(`Callback: setting ${oneTile.getAttribute('glyph')} attribute to selected`);
-							if (showSelected) oneTile.setAttribute('selected', '');
+							if (isPrimaryProject) oneTile.setAttribute('selected', '');
 						} else {
 							// log(`Callback: removing ${oneTile.getAttribute('glyph')} attribute selected`);
 							oneTile.removeAttribute('selected');
@@ -257,6 +273,13 @@ function makeCharacterChooserTileGrid(editor = getCurrentProjectEditor(), showSe
 			}
 			tileGrid.appendChild(oneTile);
 		});
+	} else {
+		tileGrid.appendChild(
+			makeElement({
+				tag: 'i',
+				content: `No characters in this range.<br><br>If this is a range of Control Characters, make sure they are enabled in: Settings > App > Show non-graphic control characters.`,
+			})
+		);
 	}
 
 	// console.timeEnd('makeCharacterChooserTileGrid');
@@ -276,7 +299,7 @@ function makeLigatureChooserTileGrid(editor = getCurrentProjectEditor(), showSel
 	}
 
 	pagedLigatures.forEach((ligature) => {
-		let oneTile = new GlyphTile({ 'displayed-item-id': ligature.id });
+		let oneTile = new GlyphTile({ 'displayed-item-id': ligature.id, project: editor.project });
 		if (showSelected && editor.selectedLigatureID === ligature.id) {
 			oneTile.setAttribute('selected', '');
 		}
@@ -320,7 +343,7 @@ function makeComponentChooserTileGrid(editor = getCurrentProjectEditor(), showSe
 	}
 
 	pagedComponents.forEach((component) => {
-		let oneTile = new GlyphTile({ 'displayed-item-id': component.id });
+		let oneTile = new GlyphTile({ 'displayed-item-id': component.id, project: editor.project });
 		if (showSelected && editor.selectedComponentID === component.id) {
 			oneTile.setAttribute('selected', '');
 		}

@@ -45,9 +45,9 @@ export function makePage_About() {
 	const rightArea = content.querySelector('.content-page__right-area');
 	const tabControl = new TabControl(rightArea);
 
-	tabControl.registerTab('Version', makeVersionInfo());
-	tabControl.registerTab('Contact and socials', makeContactInfo());
-	tabControl.registerTab('License', makeLicenseInfo());
+	tabControl.registerTab('Version', '', makeVersionInfo);
+	tabControl.registerTab('Contact and socials', '', makeContactInfo);
+	tabControl.registerTab('License', '', makeLicenseInfo);
 
 	tabControl.selectTab('Version');
 
@@ -163,6 +163,9 @@ function makeVersionInfo() {
 	const app = getGlyphrStudioApp();
 	const content = makeElement({
 		innerHTML: `
+			<div class="about-page__logo">
+				${logoVertical}
+			</div><br><br>
 			<h1>Version information</h1>
 			<div class="page__card">
 				<h3>Glyphr Studio App</h3>
@@ -183,44 +186,14 @@ function makeVersionInfo() {
 			</div>
 
 			<br><br>
-			<h1>Release Note</h1>
+
+			<h2>More details</h2>
+			<p>
+				More information about this and past versions of the Glyphr Studio app can be found on the <a href="https://www.glyphrstudio.com/blog/" target="_blank">Glyphr Studio Blog</a>, the <a href="https://github.com/glyphr-studio/Glyphr-Studio-2/releases" target="_blank">Glyphr Studio 2 GitHub > Releases</a> page, or the <a href="https://www.glyphrstudio.com/help/about/updates.html" target="_blank">Glyphr Studio 2 Help > Updates</a> page.
+			</p>
+
+
 		`,
-	});
-
-	content.appendChild(makeReleaseNote());
-	return content;
-}
-
-/**
- * Makes content for a release note
- * @param {Boolean} showLogo - put a big logo on it
- * @returns {Element}
- */
-export function makeReleaseNote(showLogo = false) {
-	let gsLogo = '';
-	if (showLogo) {
-		gsLogo = `<div class="about-page__logo">
-		${logoVertical}
-		</div><br><br>`;
-	}
-	const content = makeElement({
-		innerHTML: `
-		${gsLogo}
-		<h2>${t('ui:welcomeTips')}</h2>
-		<p>${t('ui:learn1')} <a href="https://www.glyphrstudio.com/blog" target="_blank">${t(
-			'ui:learn2'
-		)}</a>${t('ui:learn3')}${t(
-			'ui:learn4'
-		)}<a href="https://www.glyphrstudio.com/help/tutorial" target="_blank">${t(
-			'ui:learn5'
-		)}</a>，${t('ui:learn6')}
-
-		<br><br>
-
-		${t('ui:learn7')}
-			${emailLink()}
-		</p>
-	`,
 	});
 
 	return content;

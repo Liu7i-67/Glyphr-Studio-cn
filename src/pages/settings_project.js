@@ -303,6 +303,7 @@ function removeCharacterRange(range, manageDialogs = true) {
 		projectRanges.splice(index, 1);
 		if (fallback) {
 			editor.selectedCharacterRange = false;
+			editor.chooserPage.characters = 0;
 			editor.selectFallbackItem('Characters');
 		}
 		let newRanges = enableRangesForOrphanedItems();
@@ -697,6 +698,7 @@ function hideCharacterRange(range) {
 	const editor = getCurrentProjectEditor();
 	if (areCharacterRangesEqual(range, editor.selectedCharacterRange)) {
 		editor.selectedCharacterRange = false;
+		editor.chooserPage.characters = 0;
 	}
 
 	range.enabled = false;
@@ -844,7 +846,11 @@ export function addCharacterRangeToCurrentProject(range, successCallback, showNo
 		const newRange = new CharacterRange(range);
 		ranges.push(newRange);
 
-		if (newRange.name.includes('Controls')) project.settings.app.showNonCharPoints = true;
+		if (newRange.name.includes('Controls')) {
+			project.settings.app.showNonCharPoints = true;
+			// log(`clearing new range`);
+			newRange.cachedArray = false;
+		}
 		if (showNotification) showToast(`Enabled character range:<br>${range.name}`);
 		project.updateCharacterRangeCount(newRange);
 		sortCharacterRanges();

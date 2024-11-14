@@ -115,7 +115,8 @@ export default {
 		overshoot: {
 			label: `Overshoot`,
 			i18n: 'ui:font.Overshoot',
-			description: `Rounded characters are usually slightly larger than square characters to compensate for visual weight. For example, a lowercase 'o' will extend slightly above and below a lowercase 'x'. Overshoot is the measure of this distance.`,
+			description: `Rounded characters are usually slightly larger than square characters to compensate for visual weight. For example, a lowercase 'o' will extend slightly above and below a lowercase 'x'. Overshoot is the measure of this distance.
+			<br>Note: This is used internally by Glyphr Studio, it is not exported to fonts.`,
 			descriptionI18n: 'ui:font.OvershootDescription',
 			type: `Em`,
 		},
@@ -316,9 +317,9 @@ export default {
 			typeI18n: 'ui:Boolean',
 		},
 		itemChooserPageSize: {
-			label: `Number of items to show in the chooser`,
+			label: `Number of items to show in the item chooser`,
 			i18n: 'ui:app.itemChooserPageSize',
-			description: `For Ligatures, Components, and Kern Groups, this is how many items to show in the chooser menu. For projects with large numbers of items, splitting the items apart into pages can help the UI perform better.`,
+			description: `For Characters, Ligatures, Components, and Kern Groups, this is how many items to show in the item chooser menu. For projects with large numbers of items, splitting the items apart into pages can help the UI perform better.`,
 			descriptionI18n: 'ui:app.itemChooserPageSizeDescription',
 			type: `Number`,
 			typeI18n: 'ui:Number',

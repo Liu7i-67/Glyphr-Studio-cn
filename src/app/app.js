@@ -8,6 +8,7 @@ import { ProjectEditor } from '../project_editor/project_editor.js';
 import boolTestProject from '../samples/boolean_tests.gs2?raw';
 import obleggSampleProject from '../samples/oblegg.gs2?raw';
 import simpleExampleProject from '../samples/simpleExampleProject.json';
+/** @type {Object} */
 import * as config from './app_config.json';
 import { _DEV } from './dev_mode_includes.js';
 import {
@@ -23,29 +24,13 @@ import { makePage_OpenProject } from './open_project.js';
  * Creates a new Glyphr Studio Application
  */
 export class GlyphrStudioApp {
-	/**
-	 * Initialize the Glyphr Studio App, with defaults
-	 */
 	constructor() {
-		// Version
-		this.version = config.version;
-		this.versionDate = config.versionDate;
-		const semVer = parseSemVer(config.version);
-		this.versionName = `${t('ui:Version')} ${semVer.major}.${semVer.minor}`;
-
-		// Project Editors
-		this.projectEditors = [];
-		this._selectedProjectEditor;
-
-		// Current import target
-		this._editorImportTarget;
-
 		// Settings
 		this.settings = {
 			dev: {
 				// Internal Dev Stuff
 				mode: config.devMode, // {bool} global switch for all the stuff below
-				overwriteTitle: false, // {bool} Use a 'Dev Mode' window title
+				overwriteTitle: true, // {bool} Use a 'Dev Mode' window title
 				sampleProject: false, // {true/false, 'oblegg', 'bool'} Load the sample project
 				twoSampleProjects: false, // {bool} Load two sample projects
 				currentPage: false, // {Sentence case page name} navigate straight to a page
@@ -63,6 +48,18 @@ export class GlyphrStudioApp {
 			telemetry: true, // Load google analytics
 		};
 
+		// Version
+		this.version = config.version;
+		this.versionDate = config.versionDate;
+		const semVer = parseSemVer(config.version);
+		this.versionName = `Version ${semVer.major}.${semVer.minor}`;
+
+		// Project Editors
+		this.projectEditors = [];
+		this._selectedProjectEditor;
+
+		// Current import target
+		this._editorImportTarget;
 		this.temp = {};
 	}
 
@@ -93,7 +90,7 @@ export class GlyphrStudioApp {
 				// editor.project = importGlyphrProjectFromText(obleggSampleProject);
 				if (typeof dev.currentPage === 'string') editor.nav.page = dev.currentPage;
 				updateWindowUnloadEvent();
-			} else if (dev.sampleProject === true) {
+			} else if (typeof dev.sampleProject === 'boolean' && dev.sampleProject) {
 				importGlyphrProjectFromText(simpleExampleProject);
 			} else if (typeof dev.sampleProject === 'string') {
 				let proj;

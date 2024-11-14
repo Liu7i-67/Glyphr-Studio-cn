@@ -414,7 +414,7 @@ function makePanelChooserContent() {
 	if (page === 'Kerning') {
 		shownPanels = ['Attributes', 'History'];
 	} else if (page === 'Components') {
-		shownPanels = ['Attributes', 'Layers', 'History'];
+		shownPanels = ['Attributes', 'Layers', 'History', 'Guides'];
 	}
 
 	shownPanels.forEach((panelName) => {

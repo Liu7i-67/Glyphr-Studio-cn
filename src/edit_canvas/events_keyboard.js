@@ -1,7 +1,7 @@
 import { getCurrentProjectEditor, getGlyphrStudioApp } from '../app/main.js';
 import { closeEveryTypeOfDialog, showToast } from '../controls/dialogs/dialogs.js';
-import { ioFont_exportFont } from '../formats_io/font_export.js';
-import { ioSVG_exportSVGfont } from '../formats_io/svg_font_export.js';
+import { ioFont_exportFont } from '../formats_io/otf/font_export.js';
+import { ioSVG_exportSVGfont } from '../formats_io/svg_font/svg_font_export.js';
 import {
 	clipboardCopy,
 	clipboardPaste,
@@ -14,6 +14,7 @@ import {
 	togglePanOff,
 	togglePanOn,
 } from './events.js';
+import { handlePasteSVGonEditCanvas } from './events_drag_drop_paste.js';
 import { clickTool } from './tools/tools.js';
 
 // --------------------------------------------------------------
@@ -181,9 +182,14 @@ export function handleKeyPress(event) {
 		if (ehd.isCtrlDown && key === 'v') {
 			// log(`\n⮟editor.clipboard⮟`);
 			// log(editor.clipboard);
+			let didStuff = false;
 			if (editor.clipboard) {
-				clipboardPaste();
+				didStuff = clipboardPaste();
 				cancelDefaultEventActions(event);
+			}
+
+			if (!didStuff) {
+				handlePasteSVGonEditCanvas(event);
 			}
 		}
 

@@ -1,6 +1,7 @@
 import { getCurrentProjectEditor, getGlyphrStudioApp } from '../app/main.js';
 import { charsToHexArray, validateAsHex } from '../common/character_ids.js';
 import { clone, remove, round, trim } from '../common/functions.js';
+import { showError } from '../controls/dialogs/dialogs.js';
 import { TextBlockOptions } from '../display_canvas/text_block_options.js';
 import { getParentRange } from '../lib/unicode/unicode_blocks.js';
 import { getUnicodeName, getUnicodeShortName } from '../lib/unicode/unicode_names.js';
@@ -618,6 +619,53 @@ export class GlyphrStudioProject {
 
 		// log(result);
 		// log(`GlyphrStudioProject GET sortedKernGroups`, 'end');
+		return result;
+	}
+
+	/**
+	 * Glyphr Studio stores Kern Groups with collections
+	 * of left and right groups, this function permutates all the
+	 * groups into a collection of kern pairs with only a single
+	 * left and single right character (and a value).
+	 * @returns {Array} - collection of kern pairs
+	 */
+	makeCollectionOfKernPairs() {
+		// log(`GlyphrStudioProject.makeCollectionOfKernPairs`, 'start');
+		let keys = Object.keys(this.kerning);
+		let result = [];
+		let completed = [];
+		for (const k of keys) {
+			for (let lg = 0; lg < this.kerning[k].leftGroup.length; lg++) {
+				for (let rg = 0; rg < this.kerning[k].rightGroup.length; rg++) {
+					const left = this.kerning[k].leftGroup[lg];
+					const right = this.kerning[k].rightGroup[rg];
+					const value = this.kerning[k].value;
+					const id = `${left}-${right}`;
+					if (completed.indexOf(id) < 0) {
+						result.push({ left, right, value });
+						completed.push(id);
+					}
+				}
+			}
+		}
+
+		// const maxPairs = 16200;
+		const maxPairs = 16146;
+		if (completed.length > maxPairs) {
+			showError(`
+				When kern groups are exported, their members are permutated into individual kern pairs.
+				The maximum number of kern pairs that can be exported is ${maxPairs}.
+				<br><br>
+				If there are too many kern pairs, only the first ${maxPairs} will be exported.
+				<br><br>
+				Your project currently has ${completed.length} kern pairs.
+			`);
+
+			result = result.slice(0, maxPairs);
+		}
+		// log(result);
+		// log(completed);
+		// log(`GlyphrStudioProject.makeCollectionOfKernPairs`, 'end');
 		return result;
 	}
 

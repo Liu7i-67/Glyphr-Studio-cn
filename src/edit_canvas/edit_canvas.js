@@ -163,8 +163,10 @@ export class EditCanvas extends HTMLElement {
 		const width = Number(this.width);
 		const height = Number(this.height);
 		const currentItemID = this.editingItemID;
+		const currentItem = project.getItem(currentItemID);
 		// log(`currentItemID: ${currentItemID}`);
-		const advanceWidth = project.getItem(currentItemID)?.advanceWidth || 0;
+		const advanceWidth = currentItem?.advanceWidth || 0;
+		const itemXMax = Math.max(advanceWidth, currentItem?.maxes?.xMax || 0);
 
 		if (currentItemID.startsWith('kern-')) {
 			if (requestAnimationFrame) requestAnimationFrame(redrawKernEdit);
@@ -190,7 +192,7 @@ export class EditCanvas extends HTMLElement {
 			}
 
 			// Draw glyphs
-			drawGlyph(project.getItem(currentItemID), ctx, view);
+			drawGlyph(currentItem, ctx, view);
 
 			// Draw selected shape
 			const editMode = editor.selectedTool;
@@ -284,8 +286,10 @@ export class EditCanvas extends HTMLElement {
 				kernGroup.rightGroup.forEach((id) => {
 					drawItem = project.getItem(`glyph-${id}`, true);
 					// log(drawItem);
-					// log(view);
-					drawGlyph(drawItem, ctx, view, rightAlpha);
+					let thisView = clone(view);
+					thisView.dx += kernGroup.value * thisView.dz;
+					// log(thisView);
+					drawGlyph(drawItem, ctx, thisView, rightAlpha);
 				});
 
 				// Draw left hand group
@@ -296,7 +300,6 @@ export class EditCanvas extends HTMLElement {
 					// log(drawItem);
 					let thisView = clone(view);
 					thisView.dx -= drawItem.advanceWidth * thisView.dz;
-					thisView.dx += kernGroup.value * thisView.dz;
 					// log(thisView);
 					drawGlyph(drawItem, ctx, thisView, leftAlpha);
 				});
@@ -317,7 +320,7 @@ export class EditCanvas extends HTMLElement {
 				// log(`drawing capHeight...`);
 				deltaY = project.settings.font.capHeight;
 				setSystemGuideColor('light', alpha);
-				drawEmHorizontalLine(ctx, deltaY, advanceWidth, view);
+				drawEmHorizontalLine(ctx, deltaY, itemXMax, view);
 				if (showLabels) drawGuideLabel('Cap height', deltaY, true);
 			}
 			// ascent
@@ -325,7 +328,7 @@ export class EditCanvas extends HTMLElement {
 				// log(`drawing ascent...`);
 				deltaY = project.settings.font.ascent;
 				setSystemGuideColor('medium', alpha);
-				drawEmHorizontalLine(ctx, deltaY, advanceWidth, view);
+				drawEmHorizontalLine(ctx, deltaY, itemXMax, view);
 				if (showLabels) drawGuideLabel('Ascent', deltaY, true);
 			}
 			// xHeight
@@ -333,7 +336,7 @@ export class EditCanvas extends HTMLElement {
 				// log(`drawing xHeight...`);
 				deltaY = project.settings.font.xHeight;
 				setSystemGuideColor('light', alpha);
-				drawEmHorizontalLine(ctx, deltaY, advanceWidth, view);
+				drawEmHorizontalLine(ctx, deltaY, itemXMax, view);
 				if (showLabels) drawGuideLabel('X height', deltaY, true);
 			}
 			// descent
@@ -341,7 +344,7 @@ export class EditCanvas extends HTMLElement {
 				// log(`drawing descent...`);
 				deltaY = project.settings.font.descent;
 				setSystemGuideColor('medium', alpha);
-				drawEmHorizontalLine(ctx, deltaY, advanceWidth, view);
+				drawEmHorizontalLine(ctx, deltaY, itemXMax, view);
 				if (showLabels) drawGuideLabel('Descent', deltaY, true);
 			}
 
@@ -350,7 +353,7 @@ export class EditCanvas extends HTMLElement {
 				// log(`drawing baseline...`);
 				deltaY = 0;
 				setSystemGuideColor('dark', alpha);
-				drawEmHorizontalLine(ctx, deltaY, advanceWidth, view);
+				drawEmHorizontalLine(ctx, deltaY, itemXMax, view);
 				if (showLabels) drawGuideLabel('Baseline', 0, true);
 			}
 
@@ -394,7 +397,7 @@ export class EditCanvas extends HTMLElement {
 						let fill = getColorFromRGBA(guide.color, alpha);
 						ctx.fillStyle = fill;
 						if (guide.angle === 90) {
-							drawEmHorizontalLine(ctx, guide.location, advanceWidth, view);
+							drawEmHorizontalLine(ctx, guide.location, itemXMax, view);
 							if (guides.customShowLabels) drawGuideLabel(guide.name, guide.location, true);
 						} else {
 							drawEmVerticalLine(ctx, guide.location, view);
@@ -434,14 +437,14 @@ export class EditCanvas extends HTMLElement {
  * Draws a horizontal line, based on some Em values
  * @param {CanvasRenderingContext2D} ctx - canvas context
  * @param {Number} emY - y value, in Em space units (not pixels)
- * @param {Number} advanceWidth - width, in Em space units (not pixels)
+ * @param {Number} emLineWidth - width, in Em space units (not pixels)
  * @param {Object} view - view object (dx, dy, dz)
  */
-function drawEmHorizontalLine(ctx, emY = 0, advanceWidth, view) {
+function drawEmHorizontalLine(ctx, emY = 0, emLineWidth, view) {
 	// log(`drawEmHorizontalLine`, 'start');
 	let pad = 50 * view.dz;
 	// if (shouldDrawContextCharacters()) pad = 0;
-	let lineWidth = advanceWidth * view.dz;
+	let lineWidth = emLineWidth * view.dz;
 	let lineX = view.dx - pad;
 	let lineY = sYcY(emY);
 	lineWidth += pad * 2;

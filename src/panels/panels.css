@@ -84,6 +84,7 @@
 .pre-checkbox h4 {
 	position: relative;
 	top: -3px;
+	display: inline-block !important;
 }
 
 #h1InputGroup,
@@ -107,7 +108,7 @@
 .panel__card h4,
 .panel__card h5,
 .panel__card h6 {
-	display: inline-block;
+	display: block;
 	grid-column: 1 / -1;
 	margin-bottom: 0;
 }
@@ -299,11 +300,17 @@
 */
 .item-chooser__wrapper {
 	background-color: var(--offWhite);
+	padding: 10px 0px 0px 10px;
+	border-radius: 8px;
 }
 
 nav .item-chooser__wrapper {
 	padding: 20px;
 	margin-top: 5px;
+}
+
+.content-page__right-area .item-chooser__wrapper {
+	padding: 0px;
 }
 
 .item-chooser__header {
@@ -339,7 +346,7 @@ nav .item-chooser__wrapper {
 
 .item-chooser__tile-grid glyph-tile {
 	display: inline-block;
-	margin: 0px 10px 10px 0px;
+	margin: 0px 10px 8px 0px;
 }
 
 .item-chooser__tile-page-control button {

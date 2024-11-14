@@ -1,11 +1,12 @@
 import { t } from 'i18next';
+import { emailLink } from '../app/app.js';
 import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { makeElement } from '../common/dom.js';
 import { countItems } from '../common/functions.js';
 import { showModalDialog } from '../controls/dialogs/dialogs.js';
 import { makeAllItemTypeChooserContent } from '../panels/item_chooser.js';
 import { makeNavButton, toggleNavDropdown } from '../project_editor/navigator.js';
-import { makeContributeContent, makeReleaseNote } from './about.js';
+import { makeContributeContent } from './about.js';
 
 /**
  * Page > Overview
@@ -69,7 +70,6 @@ export function makePage_Overview() {
 	);
 
 	rightArea.appendChild(makeElement({ tag: 'hr', style: 'margin: 10px 0px 20px 0px;' }));
-	rightArea.appendChild(makeElement({ tag: 'br' }));
 	rightArea.appendChild(itemsContent);
 	// Page Selector
 	let l1 = content.querySelector('#nav-button-l1');
@@ -81,7 +81,24 @@ export function makePage_Overview() {
 	const welcomeCard = makeElement({
 		className: 'panel__card full-width more-padding',
 	});
-	welcomeCard.appendChild(makeReleaseNote(false));
+	welcomeCard.appendChild(
+		makeElement({
+			innerHTML: `
+		<h2>Welcome to Glyphr Studio!</h2>
+		<p>
+			You can stay up to date on the latest news over at the
+			<a href="https://www.glyphrstudio.com/blog" target="_blank">Glyphr Studio Blog</a>.
+			We also have a
+			<a href="https://www.glyphrstudio.com/help/tutorial" target="_blank">tutorial</a>
+			over on the Help and Docs site that will help you walk through some of the key steps
+			to designing your first font.
+			<br><br>
+			As always, if you find any bugs, or have an suggestions about functionality, please email us!
+			${emailLink()}
+		</p>
+	`,
+		})
+	);
 
 	const projectSummaryCard = makeElement({
 		className: 'panel__card more-padding',

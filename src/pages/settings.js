@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { getCurrentProject } from '../app/main.js';
+import { getCurrentProject, getCurrentProjectEditor } from '../app/main.js';
 import { addAsChildren, makeElement, textToNode } from '../common/dom.js';
 import { showToast } from '../controls/dialogs/dialogs.js';
 import { TabControl } from '../controls/tabs/tab_control.js';
@@ -45,9 +45,9 @@ export function makePage_Settings() {
 
 	const tabControl = new TabControl(rightArea);
 
-	tabControl.registerTab('Project', makeSettingsTabContentProject(), t('ui:Project'));
-	tabControl.registerTab('Font', makeSettingsTabContentFont(), t('ui:Font'));
-	tabControl.registerTab('App', makeSettingsTabContentApp(), t('ui:App'));
+	tabControl.registerTab('Project', t('ui:Project'), makeSettingsTabContentProject);
+	tabControl.registerTab('Font', t('ui:Font'), makeSettingsTabContentFont);
+	tabControl.registerTab('App', t('ui:App'), makeSettingsTabContentApp);
 
 	addAsChildren(panelArea, tabControl.makeTabs());
 	tabControl.selectTab('Project');
@@ -131,6 +131,18 @@ export function makeOneSettingsRow(groupName, propertyName, callback) {
 
 	if (settingType === 'Boolean') {
 		input = makeDirectCheckbox(settings[groupName], propertyName, callback);
+		if (propertyName === 'showNonCharPoints') {
+			input.addEventListener('change', (event) => {
+				const project = getCurrentProject();
+				// log(`Clearing all Character Range Caches`);
+				// log(`\n⮟project.settings.project.characterRanges⮟`);
+				// log(project.settings.project.characterRanges);
+				project.settings.project.characterRanges.forEach((range) => {
+					range.cachedArray = false;
+				});
+				getCurrentProjectEditor().selectedCharacterRange.cachedArray = false;
+			});
+		}
 	} else {
 		let typeHtml = settingType || t('ui:Text');
 
