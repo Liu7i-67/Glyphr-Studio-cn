@@ -1,5 +1,5 @@
 import {
-	calculateDeltaAngle,
+	// calculateDeltaAngle,
 	calculateDeltasFromTransform,
 	clone,
 	hasNonValues,
@@ -959,9 +959,10 @@ export class Path extends GlyphElement {
 				const nextP = this.pathPoints[(i + 1) % numPoints].p;
 				const nextNextP = this.pathPoints[(i + 2) % numPoints].p;
 				log(`point ${i} - x:${round(thisP.x)} y:${round(thisP.y)}`);
-				const angle = calculateDeltaAngle(thisP, nextP, nextNextP);
+				const angle = 0;
+				// const angle = calculateDeltaAngle(thisP, nextP, nextNextP);
 				count += angle;
-				log(`\t angle: ${round(angle)} count: ${ round(count) }`);
+				log(`\t angle: ${round(angle)} count: ${round(count)}`);
 			}
 		}
 
